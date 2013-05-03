@@ -12,27 +12,22 @@
  * @date 2013-05-02
  * @version 0.1
  */
-namespace wicked\debug\data;
+namespace wicked\core\bridge;
 
-class Span
+use maestro\AutoWire;
+use maestro\Registrar;
+
+class ContextWire extends AutoWire
 {
 
-    /** @var string */
-    public $name;
-
-    /** @var float */
-    public $start;
-
-    /** @var float */
-    public $end;
-
-    /**
-     * Get duration
-     * @return float
-     */
-    public function duration()
+    public function __construct()
     {
-        return $this->end - $this->start;
+
+        // add @context wire
+        $this->add('context', function($object, $field, $data){
+            $object->{$field} = Registrar::run($data);
+        });
+
     }
 
 }
