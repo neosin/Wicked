@@ -6,13 +6,22 @@ class Home
 {
 
     /**
-     * www.you.com/helloworld/
-     * www.you.com/helloworld/home
-     * or www.you.com/helloworld/home/index
+     * Welcome page
      */
     public function index()
     {
-        return ['name' => 'world'];
+
+    }
+
+
+    /**
+     * For url : /home/hello/{yourname}
+     * @param $name
+     * @return array
+     */
+    public function hello($name)
+    {
+        return compact('name');
     }
 
 }
