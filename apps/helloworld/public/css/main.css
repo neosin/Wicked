@@ -1,0 +1,16 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300);
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+}
+
+h1 {
+    font-weight: 400;
+    text-align: center;
+    margin-top: 200px;
+    color: #444;
+}
