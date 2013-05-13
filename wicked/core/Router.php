@@ -15,6 +15,7 @@
 namespace wicked\core;
 
 use wicked\core\router\Route;
+use wicked\core\bridge\Mog;
 
 class Router
 {

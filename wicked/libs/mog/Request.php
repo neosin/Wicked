@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the Wicked package.
+ * This file is part of Mog.
  *
  * Copyright Aymeric Assier <aymeric.assier@gmail.com>
  *
@@ -9,28 +9,34 @@
  * file that was distributed with this source code.
  *
  * @author Aymeric Assier <aymeric.assier@gmail.com>
- * @date 2013-05-02
- * @version 0.1
+ * @date 2013-05-06
+ * @version 1
  */
-namespace wicked\core;
+namespace mog;
 
+/**
+ * Class Request
+ * @package mog
+ *
+ * Basic Request object with globals data
+ */
 class Request
 {
 
     /** @var array */
-    public $get;
+    public $get = [];
 
     /** @var array */
-    public $post;
+    public $post = [];
 
     /** @var array */
-    public $files;
+    public $files = [];
 
     /** @var array */
-    public $cookie;
+    public $cookie = [];
 
     /** @var array */
-    public $session;
+    public $session = [];
 
     /** @var \stdClass */
     public $server;
@@ -55,7 +61,10 @@ class Request
             $this->post = &$_POST;
             $this->files = &$_FILES;
             $this->cookie = &$_COOKIE;
-            $this->session = &$_SESSION;
+
+            // session started
+            if(isset($_SESSION))
+                $this->session = &$_SESSION;
 
             // env data
             $this->server = (object)array_change_key_case($_SERVER, CASE_LOWER);

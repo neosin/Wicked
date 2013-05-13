@@ -14,7 +14,7 @@
 namespace wicked\core;
 
 use wicked\core\session\User;
-use wicked\core\request\Globals;
+use wicked\core\bridge\Mog;
 use wicked\debug\Logger;
 
 /**
@@ -30,14 +30,8 @@ class Kernel extends Dispatcher
     /** @var \wicked\core\router\Route */
     public $route;
 
-    /** @var \wicked\core\request\Globals */
-    public $request;
-
-    /** @var \wicked\core\session\User */
-    public $session;
-
-    /** @var \wicked\debug\Logger */
-    public $logger;
+    /** @var \wicked\core\bridge\Mog */
+    public $mog;
 
     /** @var bool */
     protected $_running = false;
@@ -49,30 +43,23 @@ class Kernel extends Dispatcher
     public function __construct(Router $router)
     {
         // init context
-        $this->request = new Globals(true);
-        $this->logger = new Logger();
-
-        // set app token
-        $this->token = 'wicked.app';
+        $this->mog = new Mog();
 
         // parent construct
         parent::__construct($router);
 
-        // init session
-        $this->session = new User($this->token);
-
         // ready !
-        $this->logger->info('Hello :)');
+        $this->mog->log->info('Hello :)');
     }
 
 
     /**
      * Run the whole web application
-     * @param \wicked\core\Request $force
+     * @param \wicked\core\bridge\Mog $force
      * @throws \RuntimeException
      * @return mixed
      */
-    public function run(Request $force = null)
+    public function run(Mog $force = null)
     {
         // already running ?
         if($this->_running)
@@ -83,10 +70,10 @@ class Kernel extends Dispatcher
 
         // generate request
         if($force)
-            $this->request = $force;
+            $this->mog = $force;
 
         // route
-        $this->route = $this->route($this->request);
+        $this->route = $this->route($this->mog);
 
         // build
         $output = $this->build($this->route);
@@ -95,44 +82,6 @@ class Kernel extends Dispatcher
         $this->_running = false;
 
         return $output;
-    }
-
-
-    /**
-     * Forward to another action
-     * @param string $to
-     * @param array $args
-     * @return mixed
-     */
-    public function forward($to, array $args = [])
-    {
-        // new route
-        $this->route->action = $to;
-        $this->route->args = $args;
-
-        // re-build
-        return $this->build($this->route);
-    }
-
-
-    /**
-     * Oops ! Something went wrong...
-     * @param $message
-     * @param $code
-     */
-    public function oops($message, $code = 418)
-    {
-//        $this->fire('oops', $this);
-//        $this->fire($code, [$this, $message]);
-    }
-
-
-    /**
-     * Badaboom !!
-     */
-    public function boom()
-    {
-        $this->oops('Boom !!');
     }
 
 }

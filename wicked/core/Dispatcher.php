@@ -15,6 +15,7 @@
 namespace wicked\core;
 
 use wicked\core\router\Route;
+use wicked\core\bridge\Mog;
 use wicked\core\bridge\ContextWire;
 
 class Dispatcher
@@ -34,16 +35,16 @@ class Dispatcher
 
     /**
      * Set action
-     * @param \wicked\core\Request $request
+     * @param \wicked\core\bridge\Mog $request
      * @throws \Exception
      * @return array|bool
      */
-    public function route(Request $request)
+    public function route(Mog $request)
     {
-        $route = $this->router->find($request->uri);
+        $route = $this->router->find($request->server->query_string);
 
         if(!$route)
-            throw new \Exception('Route [' . $request->uri . '] not found', 404);
+            throw new \Exception('Route [' . $url . '] not found', 404);
 
         return $route;
     }
@@ -86,10 +87,10 @@ class Dispatcher
 
     /**
      * Global run
-     * @param Request $request
+     * @param Mog $request
      * @return mixed
      */
-    public function run(Request $request)
+    public function run(Mog $request)
     {
         $route = $this->route($request);
         $output = $this->build($route);

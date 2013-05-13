@@ -14,7 +14,7 @@
  */
 namespace wicked;
 
-use wicked\core\Request;
+use wicked\core\bridge\Mog;
 use wicked\core\Router;
 use wicked\core\Kernel;
 use wicked\core\Displayer;
@@ -75,10 +75,10 @@ class App extends Kernel
 
     /**
      * Run this awesome app !
-     * @param Request $force
+     * @param Mog $force
      * @return mixed|void
      */
-    public function run(Request $force = null)
+    public function run(Mog $force = null)
     {
         // run kernel
         try
@@ -92,7 +92,7 @@ class App extends Kernel
         }
         catch(\Exception $e)
         {
-            $this->oops($e->getMessage(), $e->getCode());
+            $this->mog->oops($e->getMessage(), $e->getCode());
         }
     }
 

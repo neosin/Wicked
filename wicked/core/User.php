@@ -12,35 +12,29 @@
  * @date 2013-05-02
  * @version 0.1
  */
-namespace wicked\core\session;
+namespace wicked\core;
 
-use wicked\core\Session;
-
-class User extends Session
+class User
 {
 
     /** @var int */
     public $rank = 0;
 
-    /** @var array */
-    public $flash = [];
-
-    /** @var  */
-    public $user;
+    /** @var object */
+    public $entity;
 
 
     /**
-     * @param $key
+     * Init with session
      */
-    public function __construct($key)
+    public function __construct()
     {
-        // constructor
-        parent::__construct($key);
+        if(!empty($_SESSION['wicked.user'])) {
 
-        // get statefull data
-        $this->rank = $this->__get('rank');
-        $this->flash = $this->__get('flash');
-        $this->user = $this->__get('user');
+            $this->rank = $_SESSION['wicked.user']['rank'];
+            $this->entity = unserialize($_SESSION['wicked.user']['entity']);
+
+        }
     }
 
 
@@ -71,9 +65,8 @@ class User extends Session
      */
     public function __destruct()
     {
-        $this->__set('rank', $this->rank);
-        $this->__set('flash', $this->flash);
-        $this->__set('user', $this->user);
+        $_SESSION['wicked.user']['rank'] = $this->rank;
+        $_SESSION['wicked.user']['entity'] = serialize($this->entity);
     }
 
 }

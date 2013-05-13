@@ -3,7 +3,7 @@
     <head>
         <title>My first WickedApp !</title>
         <meta charset="utf-8">
-        <?= Html::css('main') ?>
+        <?= self::css('main') ?>
     </head>
     <body>
 
