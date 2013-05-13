@@ -46,6 +46,7 @@ class App extends Kernel
 
         // auto register as dependecy
         $this->set('app', $this);
+        $this->set('mog', $this->mog);
     }
 
 

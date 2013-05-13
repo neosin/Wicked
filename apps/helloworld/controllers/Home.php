@@ -6,6 +6,13 @@ class Home
 {
 
     /**
+     * @var \wicked\core\bridge\Mog
+     * @context wicked.mog
+     */
+    public $mog;
+
+
+    /**
      * Welcome page
      */
     public function index()
