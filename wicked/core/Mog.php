@@ -18,6 +18,9 @@ class Mog extends MogRequest
     /** @var \wicked\core\User */
     public $user;
 
+    /** @var array */
+    protected $_ips = ['127.0.0.1', '::1'];
+
 
     /**
      * Init with session & logger
@@ -76,9 +79,18 @@ class Mog extends MogRequest
     }
 
 
-    public function dev()
+    /**
+     * Check if dev mode
+     * @param $ip
+     * @return bool
+     */
+    public function dev($ip = null)
     {
+        // add ip to dev mode
+        if($ip)
+            $this->_ips[] = $ip;
 
+        return in_array($this->server->remote_addr, $this->_ips);
     }
 
 }
