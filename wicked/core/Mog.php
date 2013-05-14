@@ -9,7 +9,7 @@ use wicked\debug\Logger;
 class Mog extends MogRequest
 {
 
-    /** @var \wicked\core\router\Route */
+    /** @var \wicked\core\Route */
     public $route;
 
     /** @var \wicked\debug\Logger */
@@ -47,7 +47,7 @@ class Mog extends MogRequest
      */
     public function go($url, $code = 200)
     {
-        redirect(url($url), $code);
+        $this->redirect(url($url), $code);
         exit;
     }
 
@@ -57,7 +57,7 @@ class Mog extends MogRequest
      */
     public function home()
     {
-        go('');
+        $this->go('');
         return true;
     }
 
@@ -73,6 +73,12 @@ class Mog extends MogRequest
         foreach($data as $field => $value)
             if($force or (!$force and property_exists($object, $field)))
                 $object->{$field} = $value;
+    }
+
+
+    public function dev()
+    {
+
     }
 
 }

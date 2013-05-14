@@ -4,7 +4,8 @@
 require '../../wicked/bootstrap.php';
 
 // create simple app
-$app = wicked\App::simple();
+$simple = wicked\core\Router::simple();
+$app = new wicked\App($simple);
 
 // setup syn
 $syn = new syn\MySQL('todolist');

@@ -17,7 +17,7 @@ namespace wicked;
 use wicked\core\Mog;
 use wicked\core\Router;
 use wicked\core\Kernel;
-use wicked\core\Displayer;
+use wicked\core\View;
 use maestro\Registrar;
 
 /**
@@ -26,23 +26,16 @@ use maestro\Registrar;
 class App extends Kernel
 {
 
-    /** @var \wicked\core\Displayer */
-    public $displayer;
-
     /**
      * @param core\Router $router
-     * @param core\Displayer $render
      */
-    public function __construct(Router $router = null, Displayer $displayer = null)
+    public function __construct(Router $router = null)
     {
         // default router
         $router = $router ?: Router::classic();
 
         // setup kernel
         parent::__construct($router);
-
-        // assign render
-        $this->displayer = $displayer ?: new Displayer();
 
         // auto register as dependecy
         $this->set('app', $this);
@@ -89,7 +82,7 @@ class App extends Kernel
 
             // format array
             if($data !== false)
-                $this->render([$data, $this->route], $this->displayer->format);
+                $this->render($data, $this->route->view);
         }
         catch(\Exception $e)
         {
@@ -106,12 +99,14 @@ class App extends Kernel
     /**
      * Render data
      * @param $data
-     * @param string $format
+     * @param $template
      * @return bool
      */
-    public function render($data, $format = 'html')
+    public function render($data, $template)
     {
-        $this->displayer->out($data, $format);
+        $view = new View($template, $data ?: []);
+        echo $view->display();
+
         return false; // stop upcoming render
     }
 

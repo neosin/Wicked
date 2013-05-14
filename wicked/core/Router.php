@@ -14,9 +14,6 @@
  */
 namespace wicked\core;
 
-use wicked\core\router\Route;
-use wicked\core\bridge\Mog;
-
 class Router
 {
 
@@ -86,9 +83,9 @@ class Router
 
     /**
      * Format route from pattern matching
-     * @param router\Route $route
+     * @param \wicked\core\Route $route
      * @param array $placeholders
-     * @return router\Route
+     * @return \wicked\core\Route
      */
     public function resolve(Route $route, array $placeholders)
     {

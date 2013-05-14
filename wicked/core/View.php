@@ -12,17 +12,15 @@
  * @date 2013-05-02
  * @version 0.1
  */
-namespace wicked\core\view;
+namespace wicked\core;
 
-use wicked\core\Loader;
-
-class Template
+class View
 {
 
     /** @var string */
     protected $file;
 
-    /** @var Template */
+    /** @var View */
     protected $layout;
 
     /** @var array */
@@ -219,18 +217,6 @@ class Template
     protected static function asset($filename)
     {
         return url('') . 'public/' . $filename;
-    }
-
-
-    /**
-     * Shortcut : display
-     * @param $file
-     * @param array $args
-     */
-    public static function forge($file, array $args = [])
-    {
-        $template = new self($file, $args);
-        $template->display();
     }
 
 }

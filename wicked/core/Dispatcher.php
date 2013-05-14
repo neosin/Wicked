@@ -14,7 +14,6 @@
  */
 namespace wicked\core;
 
-use wicked\core\router\Route;
 use wicked\core\Wire;
 
 class Dispatcher
@@ -43,7 +42,7 @@ class Dispatcher
         $route = $this->router->find($request->server->query_string);
 
         if(!$route)
-            throw new \Exception('Route [' . $url . '] not found', 404);
+            throw new \Exception('Route [' . $request->server->query_string . '] not found', 404);
 
         return $route;
     }
@@ -51,8 +50,7 @@ class Dispatcher
 
     /**
      * Set response
-     * @param \wicked\core\router\Route $route
-     * @param router\Route $route
+     * @param \wicked\core\Route $route
      * @return mixed
      */
     public function build(Route $route)
