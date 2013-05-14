@@ -13,11 +13,9 @@ Copier le dossier **wicked** à côté de votre projet suivant cette configurati
 ```
 
 
-## Quickstart : Hello world !
+## Initialisation
 
-Nous allons utiliser l'exemple du célèbre HelloWorld afin de couvrir l'utilisation *basique* de **Wicked**
-
-### Initialisation
+Nous allons utiliser l'exemple du célèbre HelloWorld afin de couvrir l'utilisation *basique* de **Wicked**.
 
 Le fichier *bootstrap.php* permet d'inclure les librairies et mécanismes de **Wicked** dans votre projet et ainsi d'appeler les classes nécessaires à votre application :
 
@@ -39,7 +37,7 @@ class Home {}
 Afin de garder une simplicité optimale dans le développement de votre application, aucun controlleur ou modèle ne devra étendre de quoi que ce soit,
 vous laissant ainsi plus de liberté dans la conception de vos classes.
 
-### Routeur
+## Routeur
 
 **Wicked** initialise un routeur classique avec la règle suivante :
 
@@ -63,12 +61,12 @@ http://your.app/home/hello     => app\views\home\hello.php
 Si vous souhaitez définir vos propres règles, voir la section approfondie du *Router*.
 
 
-### Action
+## Action
 
 Deux comportements spécifiques sont à connaitre quant aux contrôleurs : les valeurs de retour et l'auto-wiring.
 
 
-#### Valeurs de retour
+### Valeurs de retour
 
 Dans le cadre du pattern MVP, **Wicked** prendra les valeurs de retour de la méthode appelée afin de les transmettre à la vue indiquée par le routeur,
 sans aucun appel d'une quelconque fonction de votre part. Ainsi :
@@ -88,7 +86,7 @@ class Home
 La variable *$name* sera accessible dans la vue et contiendra la valeur *"world"*.
 
 
-#### Auto-wire
+### Auto-wire
 
 Similaire aux EJB de Java, l'auto-wiring permet de lier automatiquement un objet à un attribut d'une classe grâce à la PHPDoc de ce dernier :
 
@@ -111,7 +109,7 @@ $app->set('myvar', $myobj); // accessible dans la PHPDoc par : @context wicked.m
 ```
 
 
-### Vue
+## Vue
 
 La vue est le rendu graphique de votre application. Par défaut, **Wicked** propose un moteur de rendu en HTML.
 Par exemple pour l'action *Home::hello* :
@@ -121,7 +119,7 @@ Par exemple pour l'action *Home::hello* :
 ```
 
 
-#### Layout
+### Layout
 
 Il arrive très frequemment que plusieurs vues utilisent un *layout* commun afin de ne pas dupliquer le code.
 Dans ce cas, il est nécessaire d'indiquer à la vue quel *layout* utiliser :
@@ -148,9 +146,9 @@ Et également au layout, où afficher la vue :
 ```
 
 
-#### Slot / Hook
+### Slot / Hook
 
-Le *layout* a pour vocation d'être fixe et invariant, cependant certains informations nécessite d'être dynamique (le nom de l'utilisateur en cours par exemple)
+Le *layout* a pour vocation d'être fixe et invariant, cependant certaines informations nécessite d'être dynamique (le nom de l'utilisateur en cours par exemple)
 et peuvent être changées suivant l'action. Afin de déterminer ces zones, le *layout* à besoin de connaitre l'emplacement :
 
 ```php
@@ -161,7 +159,7 @@ et peuvent être changées suivant l'action. Afin de déterminer ces zones, le *
         <meta charset="utf-8">
     </head>
     <body>
-        <header><?= self::hook('username') ?></header>
+        <header><?= self::hook('username'); ?></header>
         <?= self::content(); ?>
     </body>
 </html>
@@ -170,6 +168,17 @@ et peuvent être changées suivant l'action. Afin de déterminer ces zones, le *
 Ainsi que la vue doit envoyer le contenu dynamique :
 
 ```php
-<?php self::layout('views/layout.php'); ?>
-<?php self::slot('username', 'WickedYeti'); ?>
+self::layout('views/layout.php');
+self::slot('username', 'WickedYeti');
+```
+
+
+### Assets
+
+3 fonctions sont disponibles pour la gestion des fichiers externes :
+
+```php
+self::css('layout');                    // pour /public/css/layout.css
+self::js('jquery', 'main');             // pour /public/js/jquery.js et /public/js/main.js
+self::asset('img/background.png');      // pour /public/img/background.png
 ```
