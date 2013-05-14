@@ -63,6 +63,9 @@ trait EventManager
      */
     public function fire($event, $args = [])
     {
+        // init
+        $done = 0;
+
         // cast array
         if(!is_array($args))
             $args = [$args];
@@ -70,16 +73,22 @@ trait EventManager
         // inner events
         if(!empty($this->_events[$event]))
         {
-            foreach($this->_events[$event] as $e)
+            foreach($this->_events[$event] as $e) {
                 call_user_func_array($e, $args);
+                $done++;
+            }
         }
 
         // static events
         if(!empty(static::$_staticEvents[$event]))
         {
-            foreach(static::$_staticEvents[$event] as $e)
+            foreach(static::$_staticEvents[$event] as $e) {
                 call_user_func_array($e, $args);
+                $done++;
+            }
         }
+
+        return $done;
     }
 
 }

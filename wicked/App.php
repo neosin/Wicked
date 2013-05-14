@@ -14,7 +14,7 @@
  */
 namespace wicked;
 
-use wicked\core\bridge\Mog;
+use wicked\core\Mog;
 use wicked\core\Router;
 use wicked\core\Kernel;
 use wicked\core\Displayer;
@@ -76,7 +76,7 @@ class App extends Kernel
 
     /**
      * Run this awesome app !
-     * @param Mog $force
+     * @param \wicked\core\Mog $force
      * @return mixed|void
      */
     public function run(Mog $force = null)
@@ -93,7 +93,12 @@ class App extends Kernel
         }
         catch(\Exception $e)
         {
-            $this->mog->oops($e->getMessage(), $e->getCode());
+            // trigger event
+            $has = $this->fire($e->getCode());
+
+            // no listener for this event
+            if(!$has)
+                $this->mog->oops($e->getMessage(), $e->getCode());
         }
     }
 
@@ -116,37 +121,7 @@ class App extends Kernel
      */
     public function __toString()
     {
-        return ucfirst(str_replace('http://', '', APP_URL)) . ' powered by Wicked ;)';
-    }
-
-
-    /**
-     * Shortcut : create App with simple router
-     * @return App
-     */
-    public static function simple()
-    {
-        return new App(Router::simple());
-    }
-
-
-    /**
-     * Shortcut : create App with classic router
-     * @return App
-     */
-    public static function classic()
-    {
-        return new App(Router::classic());
-    }
-
-
-    /**
-     * Shortcut : create App with bundle router
-     * @return App
-     */
-    public static function bundle()
-    {
-        return new App(Router::bundle());
+        return str_replace('http://', '', APP_URL) . ' powered by Wicked ;)';
     }
 
 }

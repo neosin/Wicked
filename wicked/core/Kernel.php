@@ -13,6 +13,8 @@
  */
 namespace wicked\core;
 
+use wicked\core\meta\EventManager;
+
 /**
  * God Controller
  *
@@ -22,6 +24,8 @@ namespace wicked\core;
  */
 class Kernel extends Dispatcher
 {
+
+    use EventManager;
 
     /** @var \wicked\core\router\Route */
     public $route;
