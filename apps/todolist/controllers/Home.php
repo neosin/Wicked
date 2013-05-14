@@ -8,7 +8,7 @@ class Home
 {
 
     /**
-     * @var \wicked\core\bridge\Mog
+     * @var \wicked\core\Mog
      * @context wicked.mog
      */
     public $mog;
@@ -48,7 +48,7 @@ class Home
 
             // persist
             $this->syn->task->save($task);
-            return home();
+            $this->mog->home();
         }
 
     }
@@ -57,7 +57,7 @@ class Home
     /**
      * Edit form
      * @param $id
-     * @return bool
+     * @return array
      */
     public function edit($id)
     {
@@ -77,7 +77,7 @@ class Home
 
             // persist
             $this->syn->task->save($task);
-            return home();
+            $this->mog->home();
 
         }
 
@@ -88,7 +88,6 @@ class Home
     /**
      * Delete form
      * @param $id
-     * @return bool
      */
     public function delete($id)
     {
@@ -98,7 +97,7 @@ class Home
         // delete it
         $this->syn->task->delete($task);
 
-        return home();
+        $this->mog->home();
     }
 
 }

@@ -14,7 +14,6 @@
  */
 namespace wicked\core;
 
-use wicked\core\meta\EventManager;
 use wicked\core\router\Route;
 use wicked\core\view\Template;
 

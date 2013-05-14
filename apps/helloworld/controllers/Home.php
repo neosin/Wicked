@@ -28,7 +28,7 @@ class Home
      */
     public function hello($name)
     {
-        return compact('name');
+        return ['name' => $name];
     }
 
 }

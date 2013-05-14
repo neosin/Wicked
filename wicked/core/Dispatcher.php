@@ -15,8 +15,7 @@
 namespace wicked\core;
 
 use wicked\core\router\Route;
-use wicked\core\bridge\Mog;
-use wicked\core\bridge\ContextWire;
+use wicked\core\Wire;
 
 class Dispatcher
 {
@@ -35,7 +34,7 @@ class Dispatcher
 
     /**
      * Set action
-     * @param \wicked\core\bridge\Mog $request
+     * @param \wicked\core\Mog $request
      * @throws \Exception
      * @return array|bool
      */
@@ -74,7 +73,7 @@ class Dispatcher
         // apply auto-wiring on method
         if(is_array($build))
         {
-            $wire = new ContextWire();
+            $wire = new Wire();
             $wire->apply($build[0]);
         }
 

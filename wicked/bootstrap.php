@@ -74,88 +74,9 @@ function url($path)
 
 
 /**
- * Redirect to the specified url
- * @param String $url
- * @param int $code
- */
-function redirect($url, $code = 200)
-{
-    header('Location: ' . $url);
-}
-
-
-/**
- * Inner redirection
- * @param $url
- * @param int $code
- */
-function go($url, $code = 200)
-{
-    redirect(url($url), $code);
-    exit;
-}
-
-
-/**
- * Default home page
- */
-function home()
-{
-    go('');
-    return true;
-}
-
-
-/**
- * Shortcut : dev mode
- * @return bool
- */
-function dev()
-{
-    return wicked\debug\Env::dev();
-}
-
-
-/**
  * Die var_dump
  */
 function debug()
 {
     die(call_user_func_array('var_dump', func_get_args()));
-}
-
-
-/**
- * Hydrate an object with data
- * @param $object
- * @param array $data
- * @param bool $force
- */
-function hydrate(&$object, array $data, $force = false)
-{
-    foreach($data as $field => $value)
-        if($force or (!$force and property_exists($object, $field)))
-            $object->{$field} = $value;
-}
-
-
-/**
- * Get the first element of an array
- * @param array $array
- * @return bool
- */
-function first(array &$array)
-{
-    return isset($array[0]) ? $array[0] : false;
-}
-
-
-/**
- * Check if a var exists and not null
- * @param $var
- * @return bool
- */
-function exists($var)
-{
-    return !empty($var);
 }

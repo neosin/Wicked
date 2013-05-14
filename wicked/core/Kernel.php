@@ -13,10 +13,6 @@
  */
 namespace wicked\core;
 
-use wicked\core\session\User;
-use wicked\core\bridge\Mog;
-use wicked\debug\Logger;
-
 /**
  * God Controller
  *
@@ -30,7 +26,7 @@ class Kernel extends Dispatcher
     /** @var \wicked\core\router\Route */
     public $route;
 
-    /** @var \wicked\core\bridge\Mog */
+    /** @var \wicked\core\Mog */
     public $mog;
 
     /** @var bool */
@@ -55,7 +51,7 @@ class Kernel extends Dispatcher
 
     /**
      * Run the whole web application
-     * @param \wicked\core\bridge\Mog $force
+     * @param \wicked\core\Mog $force
      * @throws \RuntimeException
      * @return mixed
      */

@@ -12,12 +12,12 @@
  * @date 2013-05-02
  * @version 0.1
  */
-namespace wicked\core\bridge;
+namespace wicked\core;
 
 use maestro\AutoWire;
 use maestro\Registrar;
 
-class ContextWire extends AutoWire
+class Wire extends AutoWire
 {
 
     public function __construct()
