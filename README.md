@@ -19,7 +19,7 @@ Nous allons utiliser l'exemple du célèbre HelloWorld afin de couvrir l'utilisa
 
 ### Initialisation
 
-Le fichier *bootstrap.php* permet d'inclure les librairies et mécanismes de **Wicked** dans votre projet et ainsi d'appeler les classes nécessaire à votre application :
+Le fichier *bootstrap.php* permet d'inclure les librairies et mécanismes de **Wicked** dans votre projet et ainsi d'appeler les classes nécessaires à votre application :
 
 ```php
 require '../../wicked/bootstrap.php';
@@ -28,33 +28,33 @@ $app = new wicked\App();
 $app->run();
 ```
 
-Toutes vos classes seront reconnues par **Wicked** grâce au préfix de namespace **app*. Par exemple pour votre controller par défaut :
+Toutes vos classes seront reconnues par **Wicked** grâce au préfixe de namespace **app*. Par exemple pour votre contrôleur par défaut :
 
 ```php
-namespace app\controllers;
+namespace app\controller;
 
 class Home {}
 ```
 
-Afin de garder une simplicité optimale dans le développement de votre application, aucun controlleur ou modèle ne devra étendre de quelque chose,
+Afin de garder une simplicité optimale dans le développement de votre application, aucun controlleur ou modèle ne devra étendre de quoi que ce soit,
 vous laissant ainsi plus de liberté dans la conception de vos classes.
 
 ### Routeur
 
-**Wicked** initialise un routeur classique avec la règles suivante :
+**Wicked** initialise un routeur classique avec la règle suivante :
 
 ```
 http://your.app/controller/method/args
 ```
 
-Si l'url est incomplète, par défaut le *controller* sera *app\controllers\Home* et la méthode *index* :
+Si l'url est incomplète, par défaut le *contrôleur* sera *app\controller\Home* et la méthode *index* :
 
 ```
-http://your.app/home/hello  => app\controllers\Home::hello
-http://your.app/            => app\controllers\Home::index
+http://your.app/home/hello  => app\controller\Home::hello
+http://your.app/            => app\controller\Home::index
 ```
 
-La vue appelée se base sur le même chemin que le controller/méthode :
+La vue appelée se base sur le même chemin que le couple contrôleur/méthode :
 
 ```
 http://your.app/home/hello     => app\views\home\hello.php
@@ -65,16 +65,16 @@ Si vous souhaitez définir vos propres règles, voir la section approfondie du *
 
 ### Action
 
-Deux comportements spécifiques sont à connaitre quant aux controllers : les valeurs de retour et l'auto-wiring.
+Deux comportements spécifiques sont à connaitre quant aux contrôleurs : les valeurs de retour et l'auto-wiring.
 
 
 #### Valeurs de retour
 
-Dans le cas du pattern MVC, **Wicked** prendra les valeurs de retour de la méthode appelée afin de les transmettre à la vue indiquée par le routeur,
-sans aucun aucun appel d'une quelconque fonctions de votre part. Ainsi :
+Dans le cadre du pattern MVP, **Wicked** prendra les valeurs de retour de la méthode appelée afin de les transmettre à la vue indiquée par le routeur,
+sans aucun appel d'une quelconque fonction de votre part. Ainsi :
 
 ```php
-namespace app\controllers;
+namespace app\controller;
 
 class Home
 {
@@ -90,10 +90,10 @@ La variable *$name* sera accessible dans la vue et contiendra la valeur *"world"
 
 #### Auto-wire
 
-Similaire aux EJB de Java, l'auto-wiring permet de lier automatiquement un object à un attribut d'une classe grâce à la PHPDoc de ce dernier :
+Similaire aux EJB de Java, l'auto-wiring permet de lier automatiquement un objet à un attribut d'une classe grâce à la PHPDoc de ce dernier :
 
 ```php
-namespace app\controllers;
+namespace app\controller;
 
 class Home
 {
@@ -102,7 +102,7 @@ class Home
 }
 ```
 
-Par ce mécanisme, **Wicked** donnera automatiquement son **Mog** au controller afin que l'utilisateur puisse accéder à la requête et à divers fonctions utilise propre au framework.
+Par ce mécanisme, **Wicked** donnera automatiquement son **Mog** au contrôleur afin que l'utilisateur puisse accéder aux fonctionnalités de ce dernier.
 
 Nb : vous pouvez définir vos propres objets pouvant être accéder par l'auto-wire dans votre *index.php* grâce à la fonction :
 
@@ -113,4 +113,63 @@ $app->set('myvar', $myobj); // accessible dans la PHPDoc par : @context wicked.m
 
 ### Vue
 
-En cours d'écriture...
+La vue est le rendu graphique de votre application. Par défaut, **Wicked** propose un moteur de rendu en HTML.
+Par exemple pour l'action *Home::hello* :
+
+```php
+<h1>Hello <?= $name ?> !</h1>
+```
+
+
+#### Layout
+
+Il arrive très frequemment que plusieurs vues utilisent un *layout* commun afin de ne pas dupliquer le code.
+Dans ce cas, il est nécessaire d'indiquer à la vue quel *layout* utiliser :
+
+```php
+<?php self::layout('views/layout.php'); ?>
+
+<h1>Hello <?= $name ?> !</h1>
+```
+
+Et également au layout, où afficher la vue :
+
+```php
+<!doctype html>
+<html>
+    <head>
+        <title>My first WickedApp !</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <?= self::content(); ?>
+    </body>
+</html>
+```
+
+
+#### Slot / Hook
+
+Le *layout* a pour vocation d'être fixe et invariant, cependant certains informations nécessite d'être dynamique (le nom de l'utilisateur en cours par exemple)
+et peuvent être changées suivant l'action. Afin de déterminer ces zones, le *layout* à besoin de connaitre l'emplacement :
+
+```php
+<!doctype html>
+<html>
+    <head>
+        <title>My first WickedApp !</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <header><?= self::hook('username') ?></header>
+        <?= self::content(); ?>
+    </body>
+</html>
+```
+
+Ainsi que la vue doit envoyer le contenu dynamique :
+
+```php
+<?php self::layout('views/layout.php'); ?>
+<?php self::slot('username', 'WickedYeti'); ?>
+```
