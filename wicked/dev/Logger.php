@@ -12,11 +12,11 @@
  * @date 2013-05-02
  * @version 0.1
  */
-namespace wicked\debug;
+namespace wicked\dev;
 
 use psr\log\LoggerInterface;
 use psr\log\LogLevel;
-use wicked\debug\data\Log;
+use wicked\dev\data\Log;
 
 class Logger extends LogLevel implements LoggerInterface
 {

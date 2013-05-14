@@ -12,10 +12,10 @@
  * @date 2013-05-02
  * @version 0.1
  */
-namespace wicked\debug;
+namespace wicked\dev;
 
-use mog\data\Log;
-use mog\data\Span;
+use wicked\dev\data\Log;
+use wicked\dev\data\Span;
 
 class Console
 {
