@@ -4,7 +4,7 @@ namespace wicked\core;
 
 use mog\Mog as MogRequest;
 use wicked\core\User;
-use wicked\debug\Logger;
+use wicked\dev\Logger;
 
 class Mog extends MogRequest
 {
@@ -12,7 +12,7 @@ class Mog extends MogRequest
     /** @var \wicked\core\Route */
     public $route;
 
-    /** @var \wicked\debug\Logger */
+    /** @var \wicked\dev\Logger */
     public $log;
 
     /** @var \wicked\core\User */
