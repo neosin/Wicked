@@ -13,7 +13,7 @@ Copier le dossier **wicked** à côté de votre projet suivant cette configurati
 ```
 
 
-## Initialisation
+## Quickstart
 
 Nous allons utiliser l'exemple du célèbre HelloWorld afin de couvrir l'utilisation *basique* de **Wicked**.
 
@@ -26,7 +26,7 @@ $app = new wicked\App();
 $app->run();
 ```
 
-Toutes vos classes seront reconnues par **Wicked** grâce au préfixe de namespace **app*. Par exemple pour votre contrôleur par défaut :
+Toutes vos classes seront reconnues par **Wicked** grâce au préfixe de namespace *app*. Par exemple pour votre contrôleur par défaut :
 
 ```php
 namespace app\controller;
@@ -59,6 +59,12 @@ http://your.app/home/hello     => app\views\home\hello.php
 ```
 
 Si vous souhaitez définir vos propres règles, voir la section approfondie du *Router*.
+
+
+
+## Requête
+
+Le framework utilise la librairie **Mog** pour la gestion de la requête et des données utilisateur.
 
 
 ## Action
@@ -182,3 +188,91 @@ self::css('layout');                    // pour /public/css/layout.css
 self::js('jquery', 'main');             // pour /public/js/jquery.js et /public/js/main.js
 self::asset('img/background.png');      // pour /public/img/background.png
 ```
+
+
+
+# Fonctionnement avancé
+
+## Router
+
+### Les presets
+
+Le routeur embarque 3 configurations empiriques en fonction du type d'url souhaité :
+
+Url courte : http://your.app/method
+```php
+// app\controllers\Home::(method)
+$router = wicked\core\Router::simple();
+```
+
+Url moyenne : http://your.app/controller/method
+```php
+// app\controllers\(controller)::(method)
+$router = wicked\core\Router::classic();
+```
+
+Url longue : http://your.app/bundle/controller/method
+```php
+// app\bundles\(bundle)\controllers\(controller)::(method)
+$router = wicked\core\Router::bundle();
+```
+
+### Vos règles
+
+Malgré la présence de ces 3 presets, il est possible d'éditer vos propres règles de routing de cette manières :
+
+```php
+$router = new wicked\core\Router();
+$router->set(
+    ['(:controller)/(:action)', '(:controller)', ''],   // liste des pattern possibles avec placeholder
+    'app/controllers/(:controller)::(:action)',         // utilisation des placeholders pour définir l'action
+    'views/(:controller)/(:action).php',                // utilisation des placeholders pour définir la vue
+    ['controller' => 'Home', 'action' => 'index']       // valeurs par défaut si non spécifiées dans l'url
+);
+```
+
+Il suffit alors de passer le router à l'application afin de remplacer l'existant :
+
+```php
+$app = new wicked\App($router);
+```
+
+Il est tout à fait possible de définir plusieurs règles, le routeur s'arretera sur la première qui match l'url.
+
+
+### Combinaison
+
+Dans le cas où plusieurs règles sont à définir, et dans un soucis de lisibilité, il est possible de fragmenter le routeur de manière logique,
+par exemple, le cas d'une application avec front et backoffice :
+
+```php
+// les contrôleurs du back sont préfixé par 'admin'
+$back = new wicked\core\Router();
+$back->set(
+    ['admin/(:controller)/(:action)', 'admin/(:controller)', 'admin'],
+    'app/bundles/admin/controllers/(:controller)::(:action)',
+    'bundles/admin/views/(:controller)/(:action).php',
+    ['controller' => 'Home', 'action' => 'index']
+);
+
+// les contrôleurs du front n'ont pas besoin de préfixe
+$front = new wicked\core\Router();
+$front->set(
+    ['(:controller)/(:action)', '(:controller)', ''],
+    'app/bundles/front/controllers/(:controller)::(:action)',
+    'bundles/front/views/(:controller)/(:action).php',
+    ['controller' => 'Home', 'action' => 'index']
+);
+
+// création du router principale
+$router = new wicked\core\Router();
+$router->bind($back);
+$router->bind($front);
+
+$app = new wicked\App($router);
+```
+
+
+## Les évenements
+
+En cours de rédaction...
