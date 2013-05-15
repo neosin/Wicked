@@ -23,8 +23,11 @@ use maestro\Registrar;
 /**
  * App class, gather Kernel (action side) and Render (view side)
  */
-class App extends Kernel
+class App extends Kernel implements \ArrayAccess
 {
+
+    /** @var array */
+    protected $_services = [];
 
     /**
      * @param core\Router $router
@@ -38,32 +41,8 @@ class App extends Kernel
         parent::__construct($router);
 
         // auto register as dependecy
-        $this->set('app', $this);
-        $this->set('mog', $this->mog);
-    }
-
-
-    /**
-     * Register object as dependency
-     * @param $key
-     * @param $object
-     * @return $this
-     */
-    public function set($key, &$object)
-    {
-        Registrar::register('wicked.' . $key, $object);
-        return $this;
-    }
-
-
-    /**
-     * Get dependecy
-     * @param $key
-     * @return mixed
-     */
-    public function get($key)
-    {
-        return Registrar::run($key);
+        $this['app'] = $this;
+        $this['mog'] = $this->mog;
     }
 
 
@@ -109,6 +88,46 @@ class App extends Kernel
 
         return false; // stop upcoming render
     }
+
+
+    /**
+     * Get service
+     * @param mixed $key
+     * @param mixed $value
+     */
+    public function offsetSet($key, $value)
+    {
+        Registrar::register('wicked.' . $key, $value);
+    }
+
+
+    /**
+     * Store service
+     * @param mixed $key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return Registrar::run($key);
+    }
+
+
+    /**
+     * Check if a service is stored
+     * @param mixed $key
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return Registrar::exists($key);
+    }
+
+
+    /**
+     * Nothing
+     * @param mixed $key
+     */
+    public function offsetUnset($key){}
 
 
     /**

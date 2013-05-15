@@ -108,10 +108,10 @@ class Home
 
 Par ce mécanisme, **Wicked** donnera automatiquement son **Mog** au contrôleur afin que l'utilisateur puisse accéder aux fonctionnalités de ce dernier.
 
-Nb : vous pouvez définir vos propres objets pouvant être accéder par l'auto-wire dans votre *index.php* grâce à la fonction :
+Nb : vous pouvez définir vos propres objets pouvant être accédé par l'auto-wire dans votre *index.php* grâce à la fonction :
 
 ```php
-$app->set('myvar', $myobj); // accessible dans la PHPDoc par : @context wicked.myvar
+$app['myvar'] = $myobj; // accessible dans la PHPDoc par : @context wicked.myvar
 ```
 
 Le framework vous propose 3 traits vous permettant de lier le Mog, Syn ou les 2 en même temps :
