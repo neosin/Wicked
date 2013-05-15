@@ -40,6 +40,8 @@ class View
      */
     public function __construct($file, array $args = [])
     {
+        $file = strtolower($file);
+
         if(!file_exists($file))
             throw new \InvalidArgumentException('Template [' . $file . '] does not exist');
 
