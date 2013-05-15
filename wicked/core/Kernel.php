@@ -27,9 +27,6 @@ class Kernel extends Dispatcher
 
     use Events;
 
-    /** @var \wicked\core\Route */
-    public $route;
-
     /** @var \wicked\core\Mog */
     public $mog;
 
@@ -73,10 +70,11 @@ class Kernel extends Dispatcher
             $this->mog = $force;
 
         // route
-        $this->route = $this->route($this->mog);
+        $route = $this->route($this->mog);
+        $this->mog->route = &$route;
 
         // build
-        $output = $this->build($this->route);
+        $output = $this->build($this->mog->route);
 
         // thanks for playing :)
         $this->_running = false;

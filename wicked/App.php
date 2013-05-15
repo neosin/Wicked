@@ -82,7 +82,7 @@ class App extends Kernel
 
             // format array
             if($data !== false)
-                $this->render($data, $this->route->view);
+                $this->render($data, $this->mog->route->view);
         }
         catch(\Exception $e)
         {
