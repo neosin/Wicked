@@ -7,18 +7,7 @@ use app\models\Task;
 class Home
 {
 
-    /**
-     * @var \wicked\core\Mog
-     * @context wicked.mog
-     */
-    public $mog;
-
-    /**
-     * @var \syn\MySQL
-     * @context wicked.syn
-     */
-    public $syn;
-
+    use \wicked\wire\All;
 
     /**
      * Display list

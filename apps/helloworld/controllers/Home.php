@@ -5,12 +5,7 @@ namespace app\controllers;
 class Home
 {
 
-    /**
-     * @var \wicked\core\bridge\Mog
-     * @context wicked.mog
-     */
-    public $mog;
-
+    use \wicked\wire\Mog;
 
     /**
      * Welcome page
