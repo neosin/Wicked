@@ -224,18 +224,41 @@ class Router
 
     /**
      * Provide an auto-configured simple router
+     * @param array $config
      * @return Router
      */
-    public static function simple()
+    public static function simple(array $config = [])
     {
-        $router = new Router();
+        // define base
+        $base = isset($config['base']) ? $config['base'] : null;
 
-        $router->set(
-            ['(:action)', ''],
-            'app/controllers/Home::(:action)',
-            'views/home/(:action).php',
-            ['action' => 'index']
-        );
+        // create router
+        $router = new Router($base);
+
+        // define default controller
+        $controller = isset($config['controller']) ? ucfirst($config['controller']) : 'Home';
+
+        // set rules
+        if(isset($config['bundle'])) {
+
+            $router->set(
+                ['(:action)', ''],
+                'app/bundles/' . $config['bundle'] . '/controllers/(:controller)::(:action)',
+                'bundles/' . $config['bundle'] . '/views/(:controller)/(:action).php',
+                ['bundle' => $config['bundle'], 'controller' => $controller, 'action' => 'index']
+            );
+
+        }
+        else {
+
+            $router->set(
+                ['(:action)', ''],
+                'app/controllers/' . $controller . '::(:action)',
+                'views/' . strtolower($controller) . '/(:action).php',
+                ['action' => 'index']
+            );
+
+        }
 
         return $router;
     }
@@ -243,18 +266,41 @@ class Router
 
     /**
      * Provide an auto-configured classic router
+     * @param array $config
      * @return Router
      */
-    public static function classic()
+    public static function classic(array $config = [])
     {
-        $router = new Router();
+        // define base
+        $base = isset($config['base']) ? $config['base'] : null;
 
-        $router->set(
-            ['(:controller)/(:action)', '(:controller)', ''],
-            'app/controllers/(:controller)::(:action)',
-            'views/(:controller)/(:action).php',
-            ['controller' => 'Home', 'action' => 'index']
-        );
+        // create router
+        $router = new Router($base);
+
+        // define default controller
+        $controller = isset($config['controller']) ? ucfirst($config['controller']) : 'Home';
+
+        // set rules
+        if(isset($config['bundle'])) {
+
+            $router->set(
+                ['(:controller)/(:action)', '(:controller)', ''],
+                'app/bundles/' . $config['bundle'] . '/controllers/(:controller)::(:action)',
+                'bundles/' . $config['bundle'] . '/views/(:controller)/(:action).php',
+                ['bundle' => $config['bundle'], 'controller' => $controller, 'action' => 'index']
+            );
+
+        }
+        else {
+
+            $router->set(
+                ['(:controller)/(:action)', '(:controller)', ''],
+                'app/controllers/(:controller)::(:action)',
+                'views/(:controller)/(:action).php',
+                ['controller' => $controller, 'action' => 'index']
+            );
+
+        }
 
         return $router;
     }
@@ -262,17 +308,29 @@ class Router
 
     /**
      * Provide an auto-configured bundle router
+     * @param array $config
      * @return Router
      */
-    public static function bundle()
+    public static function bundle(array $config = [])
     {
-        $router = new Router();
+        // define base
+        $base = isset($config['base']) ? $config['base'] : null;
 
+        // define default bundle
+        $bundle = isset($config['bundle']) ? strtolower($config['bundle']) : '(:bundle)';
+
+        // create router
+        $router = new Router($base ?: $bundle);
+
+        // define default controller
+        $controller = isset($config['controller']) ? ucfirst($config['controller']) : 'Home';
+
+        // set rules
         $router->set(
-            ['(:bundle)/(:controller)/(:action)', '(:bundle)/(:controller)', '(:bundle)', ''],
-            'app/bundles/(:bundle)/controllers/(:controller)::(:action)',
-            'bundles/(:bundle)/views/(:controller)/(:action).php',
-            ['bundle' => 'default', 'controller' => 'Home', 'action' => 'index']
+            ['(:controller)/(:action)', '(:controller)', ''],
+            'app/bundles/' . $bundle . '/controllers/(:controller)::(:action)',
+            'bundles/' . $bundle . '/views/(:controller)/(:action).php',
+            ['bundle' => $bundle, 'controller' => $controller, 'action' => 'index']
         );
 
         return $router;

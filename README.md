@@ -256,23 +256,11 @@ Dans le cas où plusieurs règles sont à définir, et dans un soucis de lisibil
 par exemple, le cas d'une application avec front et backoffice :
 
 ```php
-// les contrôleurs du back sont préfixé par 'admin'
-$back = new wicked\core\Router();
-$back->set(
-    ['admin/(:controller)/(:action)', 'admin/(:controller)', 'admin'],
-    'app/bundles/admin/controllers/(:controller)::(:action)',
-    'bundles/admin/views/(:controller)/(:action).php',
-    ['controller' => 'Home', 'action' => 'index']
-);
+// router type bundle pointant sur 'admin'
+$back = wicked\core\Router::bundle(['base' => 'admin', 'bundle' => 'back']);
 
-// les contrôleurs du front n'ont pas besoin de préfixe
-$front = new wicked\core\Router();
-$front->set(
-    ['(:controller)/(:action)', '(:controller)', ''],
-    'app/bundles/front/controllers/(:controller)::(:action)',
-    'bundles/front/views/(:controller)/(:action).php',
-    ['controller' => 'Home', 'action' => 'index']
-);
+// router type classique pointant sur le bundle 'front'
+$front = wicked\core\Router::classic(['bundle' => 'front']);
 
 // création du router principale
 $router = new wicked\core\Router();
@@ -281,6 +269,8 @@ $router->bind($front);
 
 $app = new wicked\App($router);
 ```
+
+Ainsi, toutes les url commencant par *admin* poiteront sur le bundle *back*, les autres sur le bundle *front*.
 
 
 ## Les évenements
