@@ -114,6 +114,16 @@ Nb : vous pouvez définir vos propres objets pouvant être accéder par l'auto-w
 $app->set('myvar', $myobj); // accessible dans la PHPDoc par : @context wicked.myvar
 ```
 
+Le framework vous propose 3 traits vous permettant de lier le Mog, Syn ou les 2 en même temps :
+
+```php
+namespace app\controller;
+
+class Home
+{
+    use \wicked\wire\Mog; // ou Syn, ou All
+}
+```
 
 ## Vue
 
