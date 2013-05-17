@@ -288,6 +288,8 @@ $app->on(404, function($app, $message) {
 $app->run();
 ```
 
+NB : Pour chaque événement, le premier paramètre sera toujours l'application courante.
+
 Voici la liste des événements :
 
 App :
