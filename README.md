@@ -294,22 +294,14 @@ App :
 
 - before.run
 - after.run
-
-
 - before.route
 - after.route
-
-
 - before.build
 - build
 - after.build
-
-
 - before.render
 - render
 - after.render
-
-
 - set.service
 - get.service
 
