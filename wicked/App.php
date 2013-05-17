@@ -69,7 +69,7 @@ class App extends Kernel implements \ArrayAccess
         catch(\Exception $e)
         {
             // trigger event
-            $has = $this->fire($e->getCode());
+            $has = $this->fire($e->getCode(), [&$this, $e->getMessage()]);
 
             // no listener for this event
             if(!$has)

@@ -275,4 +275,39 @@ Ainsi, toutes les url commencant par *admin* poiteront sur le bundle *back*, les
 
 ## Les évenements
 
-En cours de rédaction...
+L'application déclenche des événements lors des étapes clés du processus.
+En exemple, l'exception 404 soulevée par **Wicked** est redirigée sur le flux des évévenements afin que l'utilisateur puisse agir en conséquence :
+
+```php
+$app = new wicked\App();
+
+$app->on(404, function($app, $message) {
+    die('Good day to die ! Because : ' . $message);
+});
+
+$app->run();
+```
+
+Voici la liste des événements :
+
+App :
+
+- before.run
+- after.run
+
+- before.route
+- after.route
+
+- before.build
+- build
+- after.build
+
+- before.render
+- render
+- after.render
+
+- set.service
+- get.service
+
+
+## next : coming soon...
