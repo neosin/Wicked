@@ -273,7 +273,7 @@ $app = new wicked\App($router);
 Ainsi, toutes les url commencant par *admin* poiteront sur le bundle *back*, les autres sur le bundle *front*.
 
 
-## Les évenements
+## Les événements
 
 L'application déclenche des événements lors des étapes clés du processus.
 En exemple, l'exception 404 soulevée par **Wicked** est redirigée sur le flux des évévenements afin que l'utilisateur puisse agir en conséquence :
