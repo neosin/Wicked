@@ -51,6 +51,25 @@ class View
 
 
     /**
+     * Assign var
+     * @param $name
+     * @param null $value
+     * @return $this
+     */
+    public function set($name, $value = null)
+    {
+        if(is_array($name)) {
+            foreach($name as $key => $value)
+                $this->args[$key] = $value;
+        }
+        else
+            $this->args[$name] = $value;
+
+        return $this;
+    }
+
+
+    /**
      * Add content to slot
      * @param $name
      * @param $content

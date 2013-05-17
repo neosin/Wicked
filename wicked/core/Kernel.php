@@ -25,8 +25,6 @@ use wicked\core\Events;
 class Kernel extends Dispatcher
 {
 
-    use Events;
-
     /** @var \wicked\core\Mog */
     public $mog;
 

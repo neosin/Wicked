@@ -26,9 +26,6 @@ use maestro\Registrar;
 class App extends Kernel implements \ArrayAccess
 {
 
-    /** @var array */
-    protected $_services = [];
-
     /**
      * @param core\Router $router
      */
@@ -56,12 +53,18 @@ class App extends Kernel implements \ArrayAccess
         // run kernel
         try
         {
+            // event before.run
+            $this->fire('before.run', [&$this, &$force]);
+
             // run kernel
             $data = parent::run($force);
 
             // format array
             if($data !== false)
                 $this->render($data, $this->mog->route->view);
+
+            // event after.run
+            $this->fire('after.run', [&$this]);
         }
         catch(\Exception $e)
         {
@@ -83,8 +86,18 @@ class App extends Kernel implements \ArrayAccess
      */
     public function render($data, $template)
     {
+        // event before.render
+        $this->fire('before.render', [&$this, &$data, &$template]);
+
         $view = new View($template, $data ?: []);
+
+        // event : render
+        $this->fire('render', [&$this, &$view]);
+
         echo $view->display();
+
+        // event : render
+        $this->fire('after.render', [&$this]);
 
         return false; // stop upcoming render
     }
@@ -97,6 +110,9 @@ class App extends Kernel implements \ArrayAccess
      */
     public function offsetSet($key, $value)
     {
+        // event set.service
+        $this->fire('set.service', [&$this, $key, $value]);
+
         Registrar::register('wicked.' . $key, $value);
     }
 
@@ -108,6 +124,9 @@ class App extends Kernel implements \ArrayAccess
      */
     public function offsetGet($key)
     {
+        // event get.service
+        $this->fire('set.service', [&$this, $key]);
+
         return Registrar::run($key);
     }
 

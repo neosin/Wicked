@@ -19,6 +19,8 @@ use wicked\core\Wire;
 class Dispatcher
 {
 
+    use Events;
+
     /** @var Router */
     public $router;
 
@@ -39,10 +41,16 @@ class Dispatcher
      */
     public function route(Mog $request)
     {
+        // event before.route
+        $this->fire('before.route', [&$this, &$request]);
+
         $route = $this->router->find($request->server->query_string);
 
         if(!$route)
             throw new \Exception('Route [' . $request->server->query_string . '] not found', 404);
+
+        // event after.route
+        $this->fire('after.route', [&$this, &$route]);
 
         return $route;
     }
@@ -55,6 +63,9 @@ class Dispatcher
      */
     public function build(Route $route)
     {
+        // event before.build
+        $this->fire('before.build', [&$this, &$route]);
+
         $build = $route->action;
 
         // string based action (Class::method) ?
@@ -75,8 +86,14 @@ class Dispatcher
             $wire->apply($build[0]);
         }
 
+        // event build
+        $this->fire('build', [&$this, &$build, &$route]);
+
         // run action
         $output = call_user_func_array($build, $route->args);
+
+        // event before.build
+        $this->fire('after.build', [&$this, &$output]);
 
         return $output;
     }

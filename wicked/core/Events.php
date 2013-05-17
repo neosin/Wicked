@@ -60,6 +60,7 @@ trait Events
      * Fire event
      * @param $event
      * @param array $args
+     * @return int
      */
     public function fire($event, $args = [])
     {
@@ -71,8 +72,7 @@ trait Events
             $args = [$args];
 
         // inner events
-        if(!empty($this->_events[$event]))
-        {
+        if(!empty($this->_events[$event])) {
             foreach($this->_events[$event] as $e) {
                 call_user_func_array($e, $args);
                 $done++;
@@ -80,8 +80,7 @@ trait Events
         }
 
         // static events
-        if(!empty(static::$_staticEvents[$event]))
-        {
+        if(!empty(static::$_staticEvents[$event])) {
             foreach(static::$_staticEvents[$event] as $e) {
                 call_user_func_array($e, $args);
                 $done++;
