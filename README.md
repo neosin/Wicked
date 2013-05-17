@@ -281,7 +281,7 @@ En exemple, l'exception 404 soulevée par **Wicked** est redirigée sur le flux 
 ```php
 $app = new wicked\App();
 
-$app->on(404, function($app, $message) {
+$app->on('404', function($app, $message) {
     die('Good day to die ! Because : ' . $message);
 });
 
