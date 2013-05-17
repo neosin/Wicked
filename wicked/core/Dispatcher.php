@@ -86,6 +86,10 @@ class Dispatcher
             $wire->apply($build[0]);
         }
 
+        // action not found
+        if(!is_callable($build))
+            throw new \RuntimeException('Action [' . $build . '] not found', 404);
+
         // event build
         $this->fire('build', [&$this, &$build, &$route]);
 

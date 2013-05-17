@@ -43,7 +43,7 @@ class View
         $file = strtolower($file);
 
         if(!file_exists($file))
-            throw new \InvalidArgumentException('Template [' . $file . '] does not exist');
+            throw new \InvalidArgumentException('Template [' . $file . '] does not exist', 404);
 
         $this->file = $file;
         $this->args = $args;
