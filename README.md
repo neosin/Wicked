@@ -291,9 +291,6 @@ $app->run();
 *NB : Pour chaque événement, le premier paramètre sera toujours l'application courante.*
 
 Voici la liste des événements :
-
-App :
-
 - before.run
 - after.run
 - before.route
