@@ -288,6 +288,18 @@ $app->on(404, function($app, $message) {
 $app->run();
 ```
 
+Ou encore passer des variables communes à toutes les vues :
+
+```php
+$app = new wicked\App();
+
+$app->on('render', function($app, $view) {
+    $view->set('route', $app->mog->route);
+});
+
+$app->run();
+```
+
 *NB : Pour chaque événement, le premier paramètre sera toujours l'application courante.*
 
 Voici la liste des événements :
