@@ -98,7 +98,9 @@ class View
             foreach($this->slots as $slot => $value)
                 $this->layout->slot($slot, $value);
 
-            // give args ? @todo
+            // give args
+            foreach($this->args as $name => $arg)
+                $this->layout->set($name, $arg);
 
             // push content
             $this->layout->slot('content', $content);
