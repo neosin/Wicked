@@ -18,19 +18,16 @@ class View
 {
 
     /** @var string */
-    protected $file;
+    protected $_file;
 
     /** @var View */
-    protected $layout;
+    protected $_layout;
 
     /** @var array */
-    protected $args = [];
+    protected $_args = [];
 
     /** @var array */
-    protected $slots = [];
-
-    /** @var array */
-    protected $helpers = [];
+    protected $_slots = [];
 
 
     /**
@@ -45,8 +42,8 @@ class View
         if(!file_exists($file))
             throw new \InvalidArgumentException('Template [' . $file . '] does not exist', 404);
 
-        $this->file = $file;
-        $this->args = $args;
+        $this->_file = $file;
+        $this->_args = $args;
     }
 
 
@@ -60,10 +57,10 @@ class View
     {
         if(is_array($name)) {
             foreach($name as $key => $value)
-                $this->args[$key] = $value;
+                $this->_args[$key] = $value;
         }
         else
-            $this->args[$name] = $value;
+            $this->_args[$name] = $value;
 
         return $this;
     }
@@ -77,7 +74,7 @@ class View
      */
     public function slot($name, $content)
     {
-        $this->slots[$name] = $content;
+        $this->_slots[$name] = $content;
         return $this;
     }
 
@@ -92,19 +89,19 @@ class View
         $content = $this->compile();
 
         // has layout ?
-        if($this->layout)
+        if($this->_layout)
         {
             // give slots
-            foreach($this->slots as $slot => $value)
-                $this->layout->slot($slot, $value);
+            foreach($this->_slots as $slot => $value)
+                $this->_layout->slot($slot, $value);
 
             // give args
-            foreach($this->args as $name => $arg)
-                $this->layout->set($name, $arg);
+            foreach($this->_args as $name => $arg)
+                $this->_layout->set($name, $arg);
 
             // push content
-            $this->layout->slot('content', $content);
-            return $this->layout->display();
+            $this->_layout->slot('content', $content);
+            return $this->_layout->display();
         }
         else
             return $content;
@@ -120,14 +117,10 @@ class View
         ob_start();
 
         // extract args
-        extract($this->args);
-
-        // inject helpers
-        foreach($this->helpers as $helper)
-            Loader::load($helper);
+        extract($this->_args);
 
         // import view
-        require $this->file;
+        require $this->_file;
 
         // get content
         return ob_get_clean();
@@ -141,7 +134,7 @@ class View
      */
     protected function layout($file, array $args = [])
     {
-        $this->layout = new self($file, $args);
+        $this->_layout = new self($file, $args);
     }
 
 
@@ -153,7 +146,7 @@ class View
     protected function partial($file)
     {
         if(!file_exists($file))
-            throw new \InvalidArgumentException('Partial [' . $file . '] does not exist in ' . $this->file);
+            throw new \InvalidArgumentException('Partial [' . $file . '] does not exist in ' . $this->_file);
 
         require $file;
     }
@@ -166,9 +159,9 @@ class View
      */
     protected function hook($name)
     {
-        return empty($this->slots[$name])
+        return empty($this->_slots[$name])
             ? null
-            : $this->slots[$name];
+            : $this->_slots[$name];
     }
 
 
@@ -196,7 +189,7 @@ class View
      * Meta markup
      * @return string
      */
-    protected static function meta()
+    protected function meta()
     {
         return '
             <meta charset="UTF-8">
@@ -209,7 +202,7 @@ class View
      * CSS markup
      * @return string
      */
-    protected static function css()
+    protected function css()
     {
         $str = '';
         foreach(func_get_args() as $file)
@@ -223,7 +216,7 @@ class View
      * JS markup
      * @return string
      */
-    protected static function js()
+    protected function js()
     {
         $str = '';
         foreach(func_get_args() as $file)
@@ -237,7 +230,7 @@ class View
      * @param $filename
      * @return string
      */
-    protected static function asset($filename)
+    protected function asset($filename)
     {
         return url('') . 'public/' . $filename;
     }
