@@ -138,7 +138,7 @@ class App extends Kernel implements \ArrayAccess
      */
     public function offsetExists($key)
     {
-        return Registrar::exists($key);
+        return Registrar::exists('wicked' . $key);
     }
 
 
