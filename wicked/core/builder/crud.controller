@@ -1,0 +1,91 @@
+<?php
+
+namespace {:namespace:};
+
+class {:model_short_upper:}
+{
+
+    use \wicked\wire\All;
+
+
+    /**
+     * List of {:model_short_upper:}
+     */
+    public function index()
+    {
+        // get all {:model_short_upper:}
+        $list = $this->syn->{:model_short_lower:}->find();
+
+        return ['list' => $list];
+    }
+
+
+    /**
+     * Show a {:model_short_upper:}
+     * @param $id
+     * @return array
+     */
+    public function show($id)
+    {
+        // get {:model_short_upper:}
+        if(${:model_short_lower:} = $this->syn->{:model_short_lower:}->find($id)) {
+            return ['{:model_short_lower:}' => ${:model_short_lower:}];
+        }
+
+        // {:model_short_upper:} not found
+        $this->mog->oops('{:model_short_upper:} [' . $id . '] not found.', 404);
+    }
+
+
+    /**
+     * Add or Edit a {:model_short_upper:}
+     * @param $id
+     * @return array
+     */
+    public function form($id = null)
+    {
+        // get {:model_short_upper:}
+        ${:model_short_lower:} = $id ? $this->syn->{:model_short_lower:}->find($id) : new {:model_long:}();
+
+        // {:model_short_upper:} not found
+        if(!${:model_short_lower:})
+            $this->mog->oops('{:model_short_upper:} [' . $id . '] not found.', 404);
+
+        // processing
+        if($post = $this->mog->post) {
+
+            // hydrate and save object
+            $this->mog->hydrate(${:model_short_lower:}, $post);
+            $this->syn->{:model_short_lower:}->save(${:model_short_lower:});
+
+            // go to show page
+            $this->mog->go('/{:model_short_lower:}/show/' . ${:model_short_lower:}->id);
+
+        }
+
+        return ['{:model_short_lower:}' => ${:model_short_lower:}];
+    }
+
+
+    /**
+     * Delete a given {:model_short_upper:}
+     * @param $id
+     */
+    public function delete($id)
+    {
+        // get {:model_short_upper:}
+        if(${:model_short_lower:} = $this->syn->{:model_short_lower:}->find($id)) {
+
+            // delete
+            $this->syn->{:model_short_lower:}->delete(${:model_short_lower:});
+
+            // go to list
+            $this->mog->go('/{:model_short_lower:}');
+
+        }
+
+        // {:model_short_upper:} not found
+        $this->mog->oops('{:model_short_upper:} [' . $id . '] not found.', 404);
+    }
+
+}
