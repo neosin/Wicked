@@ -127,7 +127,7 @@ class App extends Kernel implements \ArrayAccess
         // event get.service
         $this->fire('set.service', [&$this, $key]);
 
-        return Registrar::run($key);
+        return Registrar::run('wicked.' . $key);
     }
 
 
