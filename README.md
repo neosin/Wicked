@@ -3,21 +3,11 @@
 Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
 
-## Installation
-
-Copier le dossier **wicked** à côté de votre projet suivant cette configuration recommandée :
-
-```
-/yourapp
-/wicked
-```
-
-
 ## Quickstart
 
 Nous allons utiliser l'exemple du célèbre HelloWorld afin de couvrir l'utilisation *basique* de **Wicked**.
 
-Le fichier *bootstrap.php* permet d'inclure les librairies et mécanismes de **Wicked** dans votre projet et ainsi d'appeler les classes nécessaires à votre application :
+Le fichier `bootstrap.php` permet d'inclure les librairies et mécanismes de **Wicked** dans votre projet et ainsi d'appeler les classes nécessaires à votre application :
 
 ```php
 require '../../wicked/bootstrap.php';
@@ -26,7 +16,7 @@ $app = new wicked\App();
 $app->run();
 ```
 
-Toutes vos classes seront reconnues par **Wicked** grâce au préfixe de namespace *app*. Par exemple pour votre contrôleur par défaut :
+Toutes vos classes seront reconnues par **Wicked** grâce au préfixe de namespace `app\`. Par exemple pour votre contrôleur par défaut :
 
 ```php
 namespace app\controller;
@@ -45,10 +35,11 @@ vous laissant ainsi plus de liberté dans la conception de vos classes.
 http://your.app/controller/method/args
 ```
 
-Si l'url est incomplète, par défaut le *contrôleur* sera *app\controller\Home* et la méthode *index* :
+Si l'url est incomplète, par défaut le *contrôleur* sera `app\controller\Home` et la méthode `index` :
 
 ```
 http://your.app/home/hello  => app\controller\Home::hello
+http://your.app/home        => app\controller\Home::index
 http://your.app/            => app\controller\Home::index
 ```
 
@@ -89,7 +80,7 @@ class Home
 }
 ```
 
-La variable *$name* sera accessible dans la vue et contiendra la valeur *"world"*.
+La variable `$name` sera accessible dans la vue et contiendra la valeur `"world"`.
 
 
 ### Auto-wire
@@ -108,7 +99,7 @@ class Home
 
 Par ce mécanisme, **Wicked** donnera automatiquement son **Mog** au contrôleur afin que l'utilisateur puisse accéder aux fonctionnalités de ce dernier.
 
-Nb : vous pouvez définir vos propres objets pouvant être accédé par l'auto-wire dans votre *index.php* grâce à la fonction :
+Nb : vous pouvez définir vos propres objets pouvant être accédé par l'auto-wire dans votre `index.php` grâce à la fonction :
 
 ```php
 $app['myvar'] = $myobj; // accessible dans la PHPDoc par : @context wicked.myvar
@@ -128,7 +119,7 @@ class Home
 ## Vue
 
 La vue est le rendu graphique de votre application. Par défaut, **Wicked** propose un moteur de rendu en HTML.
-Par exemple pour l'action *Home::hello* :
+Par exemple pour l'action `Home::hello` :
 
 ```php
 <h1>Hello <?= $name ?> !</h1>
@@ -209,19 +200,19 @@ self::asset('img/background.png');      // pour /public/img/background.png
 
 Le routeur embarque 3 configurations empiriques en fonction du type d'url souhaité :
 
-Url courte : http://your.app/method
+Url courte : `http://your.app/method`
 ```php
 // app\controllers\Home::(method)
 $router = wicked\core\Router::simple();
 ```
 
-Url moyenne : http://your.app/controller/method
+Url moyenne : `http://your.app/controller/method`
 ```php
 // app\controllers\(controller)::(method)
 $router = wicked\core\Router::classic();
 ```
 
-Url longue : http://your.app/bundle/controller/method
+Url longue : `http://your.app/bundle/controller/method`
 ```php
 // app\bundles\(bundle)\controllers\(controller)::(method)
 $router = wicked\core\Router::bundle();
@@ -270,13 +261,13 @@ $router->bind($front);
 $app = new wicked\App($router);
 ```
 
-Ainsi, toutes les url commencant par *admin* poiteront sur le bundle *back*, les autres sur le bundle *front*.
+Ainsi, toutes les url commencant par `/admin` pointeront sur le bundle `app\bundles\back`, les autres sur le bundle `app\bundles\front`.
 
 
 ## Les événements
 
 L'application déclenche des événements lors des étapes clés du processus.
-En exemple, l'exception 404 soulevée par **Wicked** est redirigée sur le flux des évévenements afin que l'utilisateur puisse agir en conséquence :
+En exemple, l'exception `404` soulevée par **Wicked** est redirigée sur le flux des évévenements afin que l'utilisateur puisse agir en conséquence :
 
 ```php
 $app = new wicked\App();
@@ -303,18 +294,18 @@ $app->run();
 *NB : Pour chaque événement, le premier paramètre sera toujours l'application courante.*
 
 Voici la liste des événements :
-- before.run
-- after.run
-- before.route
-- after.route
-- before.build
-- build
-- after.build
-- before.render
-- render
-- after.render
-- set.service
-- get.service
+- `before.run`
+- `after.run`
+- `before.route`
+- `after.route`
+- `before.build`
+- `build`
+- `after.build`
+- `before.render`
+- `render`
+- `after.render`
+- `set.service`
+- `get.service`
 
 
 ## next : coming soon...
