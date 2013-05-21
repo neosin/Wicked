@@ -66,6 +66,10 @@ class Router
      */
     public function match($request)
     {
+        // clean url
+        $request = rtrim($request, '/');
+
+        // find in all routes
         foreach($this->_routes as $pattern => $route)
         {
             if(preg_match($pattern, $request, $placeholders))
