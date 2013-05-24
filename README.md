@@ -264,6 +264,18 @@ $app = new wicked\App($router);
 Ainsi, toutes les url commencant par `/admin` pointeront sur le bundle `app\bundles\back`, les autres sur le bundle `app\bundles\front`.
 
 
+### La route actuelle
+
+Si vous souhaitez accéder aux informations de la route courante, demandez au Mog !
+
+```php
+$mog->route;
+$mog->route->action;    // l'action en cours
+$mog->route->view;      // la vue appelée
+$mog->route->data;      // les placeholders de l'url
+```
+
+
 ## Authentification
 
 Dans le cas où certaines actions sont strictement protégées pour un certain rang, la gestion se fait par annotation soit sur le contrôleur en entier :
