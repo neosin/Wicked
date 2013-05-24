@@ -317,6 +317,23 @@ Dans le cas contraire, un événement `403` est déclenché.
 NB : par défaut, le rang défini par la méthode sera prioritaire sur le contrôleur.
 
 
+## Messages flash
+
+L'ajout d'un message flash s'effectue via votre ami le **Mog** :
+
+```php
+$mog->flash('dc', 'comics');
+```
+
+Depuis la vue, vous pouvez récupérer le message grâve à la variable/fonction `$flash` :
+
+```php
+<?= $flash('dc'); ?>
+```
+
+*NB : `$flash` devient désormais une variable réservée, attention à ne pas l'écraser !*
+
+
 ## Les événements
 
 L'application déclenche des événements lors des étapes clés du processus.
