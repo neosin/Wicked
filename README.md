@@ -264,6 +264,47 @@ $app = new wicked\App($router);
 Ainsi, toutes les url commencant par `/admin` pointeront sur le bundle `app\bundles\back`, les autres sur le bundle `app\bundles\front`.
 
 
+## Authentification
+
+Dans le cas où certaines actions sont strictement protégées pour un certain rang, la gestion se fait par annotation soit sur le contrôleur en entier :
+
+```php
+namespace app\controllers;
+
+/**
+ * @rank 8
+ */
+class Home
+{
+    ...
+}
+```
+
+Ou directement sur la méthode :
+
+```php
+namespace app\controllers;
+
+class Home
+{
+
+    /**
+     * @rank 4
+     */
+    public function index()
+    {
+        ...
+    }
+
+}
+```
+
+Cette annotation sera comparée à `$mog->user->rank` afin de déterminer si l'utilisateur à le droit ou non d'accéder à cette action.
+Dans le cas contraire, un événement 403 est déclenché.
+
+NB : par défaut, le rang définie par la méthode sera prioritaire sur le contrôleur.
+
+
 ## Les événements
 
 L'application déclenche des événements lors des étapes clés du processus.

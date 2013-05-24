@@ -15,6 +15,7 @@
 namespace wicked\core;
 
 use wicked\core\Wire;
+use wicked\tools\Annotation;
 
 class Dispatcher
 {

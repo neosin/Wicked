@@ -18,6 +18,7 @@ use wicked\core\Mog;
 use wicked\core\Router;
 use wicked\core\Kernel;
 use wicked\core\View;
+use wicked\tools\Annotation;
 use maestro\Registrar;
 
 /**
@@ -40,6 +41,41 @@ class App extends Kernel implements \ArrayAccess
         // auto register as dependecy
         $this['app'] = $this;
         $this['mog'] = $this->mog;
+
+        // auth filter
+        $this->on('build', function($app, $build, $route){
+
+            // only for controller::method
+            if(is_array($build)) {
+
+                // init security
+                $allowed = true;
+
+                // get rank annotation on method
+                $rank = Annotation::method($build[0], $build[1], 'rank');
+
+                // method defines rank, check security
+                if($rank != null and $rank > $app->mog->user->rank)
+                    $allowed = false;
+
+                // method does not defines rank
+                if($rank == null) {
+
+                    // get rank annotation on controller
+                    $rank = Annotation::object($build[0], 'rank');
+
+                    // check
+                    if($rank and $rank > $app->mog->user->rank)
+                        $allowed = false;
+
+                }
+
+                // allowed ?
+                if(!$allowed)
+                    $this->mog->oops('Action [' . get_class($build[0]) . '::' . $build[1] . '] not allowed', 403);
+            }
+
+        });
     }
 
 
