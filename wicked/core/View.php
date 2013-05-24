@@ -53,7 +53,7 @@ class View
      * @param null $value
      * @return $this
      */
-    public function set($name, $value = null)
+    public function set($name, $value)
     {
         if(is_array($name)) {
             foreach($name as $key => $value)

@@ -12,7 +12,7 @@
  * @date 2013-05-02
  * @version 0.1
  */
-namespace wicked\libs;
+namespace wicked\tools;
 
 class URL
 {

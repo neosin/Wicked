@@ -1,7 +1,25 @@
 <?php
 
+/**
+ * This file is part of the Wicked package.
+ *
+ * Copyright Aymeric Assier <aymeric.assier@gmail.com>
+ *
+ * For the full copyright and license information, please view the Licence.txt
+ * file that was distributed with this source code.
+ *
+ * @author Aymeric Assier <aymeric.assier@gmail.com>
+ * @date 2013-05-15
+ * @version 1
+ */
 namespace wicked\tools;
 
+
+/**
+ * Class Annotation
+ * Get @tag from PHPDoc
+ * @package wicked\tools
+ */
 abstract class Annotation
 {
 

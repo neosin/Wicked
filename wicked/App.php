@@ -38,9 +38,31 @@ class App extends Kernel implements \ArrayAccess
         // setup kernel
         parent::__construct($router);
 
-        // auto register as dependecy
-        $this['app'] = $this;
+        // auto register mog as dependency
         $this['mog'] = $this->mog;
+
+        // flash support
+        $this->on('render', function($app, \wicked\core\View $view){
+
+            // add flashes to view
+            $view->set('flash', function($name) use($app){
+
+                // flahs exists
+                if(isset($this->mog->session['wicked.flash'][$name])) {
+
+                    // get flash
+                    $flash = $this->mog->session['wicked.flash'][$name];
+
+                    // remove from session
+                    $this->mog->session['wicked.flash'][$name] = null;
+
+                    return $flash;
+                }
+
+                return null;
+            });
+
+        });
 
         // auth filter
         $this->on('build', function($app, $build, $route){

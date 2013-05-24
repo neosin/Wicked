@@ -93,4 +93,22 @@ class Mog extends MogRequest
         return in_array($this->server->remote_addr, $this->_ips);
     }
 
+
+    /**
+     * Add or get flash
+     * @param $name
+     * @param null $content
+     * @return $this|null
+     */
+    public function flash($name, $content)
+    {
+        // init
+        if(!isset($this->session['wicked.flash']))
+            $this->session['wicked.flash'] = [];
+
+        // set
+        $this->session['wicked.flash'][$name] = $content;
+        return $this;
+    }
+
 }
