@@ -1,0 +1,9 @@
+<?php self::layout('{:layout:}'); ?>
+
+<div id="list">
+
+    <?php foreach($list as ${:model_short_lower:}): ?>
+    <div class="item"><?= ${:model_short_lower:}->id; ?></div>
+    <?php endforeach; ?>
+
+</div>

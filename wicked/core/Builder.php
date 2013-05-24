@@ -36,10 +36,11 @@ class Builder
         $data['model_short_lower'] = strtolower($data['model_short_upper']);
         $data['namespace'] = str_replace('/', '\\', 'app' . $path . '/controllers');
 
+
         // create folders
         $base = dirname($_SERVER['SCRIPT_FILENAME']);
         $controllerPath = $base . $path . DIRECTORY_SEPARATOR . 'controllers';
-        $viewsPath = $base . $path . DIRECTORY_SEPARATOR . 'views/' . $data['model_short_lower'];
+        $viewsPath = $base . $path . DIRECTORY_SEPARATOR . 'views/';
 
         if(!is_dir($controllerPath))
             mkdir($controllerPath, 0777, true);
@@ -48,13 +49,43 @@ class Builder
             mkdir($viewsPath, 0777, true);
 
         // create controller file
-        $template = file_get_contents(dirname(__FILE__) . '/builder/crud.controller');
-        foreach($data as $placeholder => $value)
-            $template = str_replace('{:' . $placeholder . ':}', $value, $template);
+        static::fill($controllerPath . DIRECTORY_SEPARATOR . $data['model_short_upper'] . '.php', 'crud.controller', $data);
 
-        file_put_contents($controllerPath . DIRECTORY_SEPARATOR . $data['model_short_upper'] . '.php', $template);
+        // create layout
+        static::fill($viewsPath . 'layout.php', 'view.layout', $data);
 
-        // create views @todo
+        // create views
+        static::fill($viewsPath . '/' . $data['model_short_lower'] . '/index.php', 'crud.view.index', $data);
+        static::fill($viewsPath . '/' . $data['model_short_lower'] . '/show.php', 'crud.view.show', $data);
+        static::fill($viewsPath . '/' . $data['model_short_lower'] . '/form.php', 'crud.view.form', $data);
+
+    }
+
+
+    /**
+     * Make file from template and data
+     * @param $file
+     * @param $template
+     * @param $data
+     * @return bool|int
+     */
+    protected static function fill($file, $template, $data)
+    {
+        // only if file does not exist
+        if(!file_exists($file)) {
+
+            // get template
+            $template = file_get_contents(dirname(__FILE__) . '/builder/' . $template);
+
+            // fill with data
+            foreach($data as $placeholder => $value)
+                $template = str_replace('{:' . $placeholder . ':}', $value, $template);
+
+            // write file
+            return file_put_contents($file, $template);
+        }
+
+        return false;
     }
 
 }
