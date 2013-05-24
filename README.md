@@ -299,7 +299,7 @@ class Home
 }
 ```
 
-Cette annotation sera comparée à `$mog->user->rank` afin de déterminer si l'utilisateur à le droit ou non d'accéder à cette action.
+Cette annotation sera comparée à `$mog->user->rank` afin de déterminer si l'utilisateur à le droit ou non d'accéder à cette action (supérieur ou égal).
 Dans le cas contraire, un événement `403` est déclenché.
 
 NB : par défaut, le rang définie par la méthode sera prioritaire sur le contrôleur.
