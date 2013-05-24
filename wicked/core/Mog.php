@@ -98,16 +98,22 @@ class Mog extends MogRequest
      * Add or get flash
      * @param $name
      * @param null $content
+     * @param int $iteration
      * @return $this|null
      */
-    public function flash($name, $content)
+    public function flash($name, $content, $iteration = 1)
     {
         // init
         if(!isset($this->session['wicked.flash']))
             $this->session['wicked.flash'] = [];
 
         // set
-        $this->session['wicked.flash'][$name] = $content;
+        $this->session['wicked.flash'][$name] = [
+            'content' => $content,
+            'used' => 0,
+            'max' => $iteration
+        ];
+
         return $this;
     }
 

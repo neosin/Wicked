@@ -47,16 +47,19 @@ class App extends Kernel implements \ArrayAccess
             // add flashes to view
             $view->set('flash', function($name) use($app){
 
-                // flahs exists
-                if(isset($this->mog->session['wicked.flash'][$name])) {
+                // flash exists
+                if(!empty($this->mog->session['wicked.flash'][$name])) {
 
                     // get flash
                     $flash = $this->mog->session['wicked.flash'][$name];
 
                     // remove from session
-                    $this->mog->session['wicked.flash'][$name] = null;
+                    if($flash['used'] + 1 >= $flash['max'])
+                        $this->mog->session['wicked.flash'][$name] = null;
+                    else
+                        $flash['used'] = $flash['used'] + 1;
 
-                    return $flash;
+                    return $flash['content'];
                 }
 
                 return null;
