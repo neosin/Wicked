@@ -35,6 +35,9 @@ class Route
     /** @var callable */
     public $filter;
 
+    /** @var array placeholder */
+    public $data = [];
+
 
     /**
      * Create a new route

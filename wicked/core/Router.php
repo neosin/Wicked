@@ -113,6 +113,9 @@ class Router
             $route->view = str_replace('(:'.$key.')', $value, $route->view);
         }
 
+        // placeholder to route
+        $route->data = $placeholders;
+
         // return formatted route
         return $route;
     }
