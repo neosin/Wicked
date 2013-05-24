@@ -280,7 +280,7 @@ class Home
 }
 ```
 
-Ou directement sur la méthode :
+Soit directement sur la méthode :
 
 ```php
 namespace app\controllers;
@@ -300,7 +300,7 @@ class Home
 ```
 
 Cette annotation sera comparée à `$mog->user->rank` afin de déterminer si l'utilisateur à le droit ou non d'accéder à cette action.
-Dans le cas contraire, un événement 403 est déclenché.
+Dans le cas contraire, un événement `403` est déclenché.
 
 NB : par défaut, le rang définie par la méthode sera prioritaire sur le contrôleur.
 
