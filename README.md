@@ -325,7 +325,7 @@ L'ajout d'un message flash s'effectue via votre ami le **Mog** :
 $mog->flash('dc', 'comics');
 ```
 
-Depuis la vue, vous pouvez récupérer le message grâve à la variable/fonction `$flash` :
+Depuis la vue, vous pouvez récupérer le message grâce à la variable/fonction `$flash` (retourne *null* si le message n'existe pas) :
 
 ```php
 <?= $flash('dc'); ?>
