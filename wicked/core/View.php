@@ -80,6 +80,52 @@ class View
 
 
     /**
+     * Inner access : Display slot
+     * @param $name
+     * @return mixed
+     */
+    protected function hook($name)
+    {
+        return empty($this->_slots[$name])
+            ? null
+            : $this->_slots[$name];
+    }
+
+
+    /**
+     * Inner access : Set layout
+     * @param $file
+     * @param array $args
+     */
+    protected function layout($file, array $args = [])
+    {
+        $this->_layout = new self($file, $args);
+    }
+
+
+    /**
+     * Inner access : Shortcut content slot
+     * @return string
+     */
+    protected function content()
+    {
+        return $this->hook('content');
+    }
+
+
+    /**
+     * Inner access : Import raw partial
+     * @param $file
+     * @throws \InvalidArgumentException
+     */
+    protected function load($file)
+    {
+        $partial = new self($file);
+        $partial->display();
+    }
+
+
+    /**
      * Generate template
      * @return string
      */
@@ -124,54 +170,6 @@ class View
 
         // get content
         return ob_get_clean();
-    }
-
-
-    /**
-     * Inner access : Set layout
-     * @param $file
-     * @param array $args
-     */
-    protected function layout($file, array $args = [])
-    {
-        $this->_layout = new self($file, $args);
-    }
-
-
-    /**
-     * Inner access : Import raw partial
-     * @param $file
-     * @throws \InvalidArgumentException
-     */
-    protected function partial($file)
-    {
-        if(!file_exists($file))
-            throw new \InvalidArgumentException('Partial [' . $file . '] does not exist in ' . $this->_file);
-
-        require $file;
-    }
-
-
-    /**
-     * Inner access : Display slot
-     * @param $name
-     * @return mixed
-     */
-    protected function hook($name)
-    {
-        return empty($this->_slots[$name])
-            ? null
-            : $this->_slots[$name];
-    }
-
-
-    /**
-     * Inner access : Shortcut content slot
-     * @return string
-     */
-    protected function content()
-    {
-        return $this->hook('content');
     }
 
 
