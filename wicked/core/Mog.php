@@ -39,7 +39,7 @@ class Mog extends MogRequest
      */
     public function redirect($url, $code = 200)
     {
-        header('Location: ' . $url, true, $code);
+        header('Location: ' . $url);
     }
 
 

@@ -89,7 +89,7 @@ class Dispatcher
 
         // action not found
         if(!is_callable($build))
-            throw new \RuntimeException('Action [' . (is_array($build) ? get_class($build[0]) . '::' . $build[0] : $build) . '] not found', 404);
+            throw new \RuntimeException('Action [' . (is_array($build) ? get_class($build[0]) . '::' . $build[1] : $build) . '] not found', 404);
 
         // event build
         $this->fire('build', [&$this, &$build, &$route]);
