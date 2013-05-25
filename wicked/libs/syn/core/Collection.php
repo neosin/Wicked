@@ -92,10 +92,15 @@ class Collection
 
     /**
      * Find entity/entities
+     * Ex: $syn->user->find();
+     * Ex: $syn->user->find(['age' => 24]);
+     * Ex: $syn->user->find(['age' => 24], 'name');
+     * Ex: $syn->user->find(['age' => 24], ['name' => 'desc']);
      * @param array $where
+     * @param array $orderBy
      * @return bool|\PDOStatement
      */
-    public function find($where = [])
+    public function find($where = [], $orderBy = [])
     {
         // prepare sql
         $sql = 'SELECT * FROM `' . $this->_orm->prefix() . $this->_table . '`';
@@ -117,6 +122,22 @@ class Collection
                 $multiple = false;
                 $sql .= ' WHERE `id` = ' . $where;
             }
+        }
+
+        // order by clause
+        if($orderBy) {
+
+            $sql .= ' ORDER BY';
+
+            // shortcut
+            if(is_string($orderBy)) {
+                $sql .= ' `' . $orderBy . '`';
+            }
+            else {
+                foreach($orderBy as $field => $dir)
+                    $sql .= ' `' . $field . '` ' . strtoupper($dir);
+            }
+
         }
 
         // execute

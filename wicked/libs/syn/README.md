@@ -127,6 +127,18 @@ Si le modèle **user** n'a pas été mappé précédemment, la fonction **find**
 $users = $syn->user->find(['age' => 24]);
 ```
 
+### Trouver les enregistrements d'une entité avec orderby
+
+```php
+$users = $syn->user->find(['age' => 24], 'name');
+```
+
+ou
+
+```php
+$users = $syn->user->find(['age' => 24], ['name' => 'desc']);
+```
+
 ### Trouver <strong>une</strong> entité par ID
 
 ```php
