@@ -189,10 +189,10 @@ class View
      */
     protected function meta()
     {
-        return '
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1" />
-        ';
+        $meta = "\n\t" . '<meta charset="UTF-8">';
+        $meta .= "\n\t" . '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1" />';
+
+        return $meta . "\n";
     }
 
 
@@ -204,9 +204,9 @@ class View
     {
         $str = '';
         foreach(func_get_args() as $file)
-            $str .= '<link type="text/css" media="screen" href="' . static::asset('css/' . $file . '.css') . '" rel="stylesheet" />';
+            $str .= "\n\t" . '<link type="text/css" media="screen" href="' . static::asset('css/' . $file . '.css') . '" rel="stylesheet" />';
 
-        return $str;
+        return $str . "\n";
     }
 
 
@@ -218,9 +218,9 @@ class View
     {
         $str = '';
         foreach(func_get_args() as $file)
-            $str .= '<script type="text/javascript" src="' . static::asset('js/' . $file . '.js') . '"></script>';
+            $str .= "\n\t" . '<script type="text/javascript" src="' . static::asset('js/' . $file . '.js') . '"></script>';
 
-        return $str;
+        return $str . "\n";
     }
 
     /**
