@@ -228,9 +228,15 @@ class Collection
         // execute
         $result = $this->_orm->pdo()->exec($sql);
 
-        // retrieve object
-        if($result)
-            $entity = $this->find($this->_orm->pdo()->lastInsertId());
+        // re-hydrate object
+        if($result) {
+
+            // has id
+            $newId = $entity->id ?: $this->_orm->pdo()->lastInsertId();
+            if($newId)
+                $entity = $this->find($newId);
+
+        }
 
         // filter after.save
         $this->apply('after.save', $entity);
