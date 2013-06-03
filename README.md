@@ -85,16 +85,18 @@ La variable `$name` sera accessible dans la vue et contiendra la valeur `"world"
 
 ### Interception de vue
 
-Il est possible de changer de vue à la volée tout en transmettant l'habituel tableau de données :
+Il est possible de changer de vue à la volée grâve aux annotations :
 
 ```php
 namespace app\controller;
 
 class Home
 {
+
+    /** @view path/to/another/view.php */
     public function hello()
     {
-        return render('views/another/template.php', ['name' => 'world']);
+        return ['name' => 'world'];
     }
 }
 ```
