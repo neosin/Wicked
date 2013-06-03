@@ -41,6 +41,15 @@ class App extends Kernel implements \ArrayAccess
         // auto register mog as dependency
         $this['mog'] = $this->mog;
 
+        // view interception
+        $this->on('after.build', function(&$app, &$data){
+
+            if($data instanceof \Closure) {
+                $data = call_user_func($data, $app);
+            }
+
+        });
+
         // flash support
         $this->on('render', function($app, \wicked\core\View $view){
 

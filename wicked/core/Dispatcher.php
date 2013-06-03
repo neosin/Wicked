@@ -97,7 +97,7 @@ class Dispatcher
         // run action
         $output = call_user_func_array($build, $route->args);
 
-        // event before.build
+        // event after.build
         $this->fire('after.build', [&$this, &$output]);
 
         return $output;
