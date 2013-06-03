@@ -12,7 +12,10 @@ class Mog extends MogRequest
     /** @var \wicked\core\Route */
     public $route;
 
-    /** @var \wicked\core\User */
+    /** @var int */
+    public $rank;
+
+    /** @var mixed */
     public $user;
 
     /** @var array */
@@ -25,7 +28,13 @@ class Mog extends MogRequest
     public function __construct()
     {
         parent::__construct();
-        $this->user = new User();
+
+        // retrieve session user
+        if(!empty($_SESSION['wicked.user'])) {
+            $this->rank = $_SESSION['wicked.user']['rank'];
+            $this->user = unserialize($_SESSION['wicked.user']['entity']);
+        }
+
     }
 
     /**
@@ -82,6 +91,38 @@ class Mog extends MogRequest
         ];
 
         return $this;
+    }
+
+
+    /**
+     * Login user
+     * @param $rank
+     * @param null $user
+     */
+    public function login($rank = 1, $user = null)
+    {
+        $this->rank = $rank;
+        $this->user = $user;
+    }
+
+
+    /**
+     * Logout user
+     */
+    public function logout()
+    {
+        $this->rank = 0;
+        $this->user = null;
+    }
+
+
+    /**
+     * Save user session
+     */
+    public function __destruct()
+    {
+        $_SESSION['wicked.user']['rank'] = $this->rank;
+        $_SESSION['wicked.user']['entity'] = serialize($this->user);
     }
 
 }
