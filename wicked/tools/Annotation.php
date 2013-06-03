@@ -80,7 +80,7 @@ abstract class Annotation
             return false;
 
         // parse @annotation
-        preg_match_all('/@([a-zA-Z0-9]+) ([a-zA-Z0-9._\- ]+)/', $ref->getDocComment(), $out, PREG_SET_ORDER);
+        preg_match_all('/@([a-zA-Z0-9]+) ([a-zA-Z0-9._\-\/ ]+)/', $ref->getDocComment(), $out, PREG_SET_ORDER);
 
         // sort
         $data = [];

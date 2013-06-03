@@ -41,15 +41,6 @@ class App extends Kernel implements \ArrayAccess
         // auto register mog as dependency
         $this['mog'] = $this->mog;
 
-        // view interception
-        $this->on('after.build', function(&$app, &$data){
-
-            if($data instanceof \Closure) {
-                $data = call_user_func($data, $app);
-            }
-
-        });
-
         // flash support
         $this->on('render', function($app, \wicked\core\View $view){
 
@@ -107,6 +98,11 @@ class App extends Kernel implements \ArrayAccess
                 // allowed ?
                 if(!$allowed)
                     $this->mog->oops('Action [' . get_class($build[0]) . '::' . $build[1] . '] not allowed', 403);
+
+                // custom view
+                $view = Annotation::method($build[0], $build[1], 'view');
+                if($view !== null)
+                    $app->mog->route->view = $view;
             }
 
         });

@@ -74,22 +74,6 @@ function url($path)
 
 
 /**
- * Change view and pass data
- * @param $view
- * @param array $data
- * @return callable
- */
-function render($view, $data = [])
-{
-    return function(\wicked\App &$app) use($view, $data)
-    {
-        $app->mog->route->view = $view;
-        return $data;
-    };
-}
-
-
-/**
  * Debug var
  */
 function debug()
