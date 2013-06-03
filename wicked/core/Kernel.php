@@ -44,7 +44,7 @@ class Kernel extends Dispatcher
         parent::__construct($router);
 
         // ready !
-        $this->mog->log->info('Hello :)');
+        $this->mog->log('Hello :)');
     }
 
 

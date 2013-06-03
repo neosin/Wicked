@@ -12,9 +12,6 @@ class Mog extends MogRequest
     /** @var \wicked\core\Route */
     public $route;
 
-    /** @var \wicked\dev\Logger */
-    public $log;
-
     /** @var \wicked\core\User */
     public $user;
 
@@ -28,7 +25,6 @@ class Mog extends MogRequest
     public function __construct()
     {
         parent::__construct();
-        $this->log = new Logger();
         $this->user = new User();
     }
 
