@@ -59,6 +59,9 @@ class Mog extends Request implements \ArrayAccess
     /** @var array */
     protected $_logs = [];
 
+    /** @var array */
+    protected $_ips = ['127.0.0.1', '::1'];
+
 
     /**
      * Create request from globals
@@ -71,7 +74,7 @@ class Mog extends Request implements \ArrayAccess
 
         // advanced data
         $this->ip = $this->server->remote_addr;
-        $this->local = ($this->ip == '127.0.0.1' or $this->ip = '::1');
+        $this->local = in_array($this->ip, ['127.0.0.1', '::1']);
         $this->url = ((isset($this->server->https) and $this->server->https == 'on') ? 'https' : 'http') . '://' . $this->server->http_host . $this->server->request_uri;
         $this->lang = explode(',', $this->server->http_accept_language)[0];
         $this->method = $this->server->request_method;
@@ -103,11 +106,10 @@ class Mog extends Request implements \ArrayAccess
     /**
      * Redirect to url
      * @param string $url
-     * @param int $code
      */
-    public function go($url, $code = 200)
+    public function go($url)
     {
-        header('Location: ' . $url, true, $code);
+        header('Location: ' . $url);
         exit;
     }
 
@@ -121,7 +123,7 @@ class Mog extends Request implements \ArrayAccess
      */
     public function upload($filename, $to, $name = null)
     {
-        if(isset($this->files[$filename]))
+        if(!isset($this->files[$filename]))
             $this->oops('No file named "' . $filename . '" to upload !');
 
         $tmp = $this->files[$filename]['tmp_name'];
@@ -210,11 +212,40 @@ class Mog extends Request implements \ArrayAccess
 
 
     /**
+     * Hydrate an object with data
+     * @param $object
+     * @param array $data
+     * @param bool $force
+     */
+    public function hydrate(&$object, array $data, $force = false)
+    {
+        foreach($data as $field => $value)
+            if($force or (!$force and property_exists($object, $field)))
+                $object->{$field} = $value;
+    }
+
+
+    /**
      * Give some help to debug stuff
      */
     public function debug()
     {
         die(call_user_func_array('var_dump', func_get_args()));
+    }
+
+
+    /**
+     * Check if dev mode
+     * @param $ip
+     * @return bool
+     */
+    public function dev($ip = null)
+    {
+        // add ip to dev mode
+        if($ip)
+            $this->_ips[] = $ip;
+
+        return in_array($this->server->remote_addr, $this->_ips);
     }
 
 
