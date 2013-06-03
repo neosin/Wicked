@@ -60,7 +60,7 @@ Le framework utilise la librairie **Mog** pour la gestion de la requête et des 
 
 ## Action
 
-Deux comportements spécifiques sont à connaitre quant aux contrôleurs : les valeurs de retour et l'auto-wiring.
+Trois comportements spécifiques sont à connaitre quant aux contrôleurs : les valeurs de retour, l'interception de vue et l'auto-wiring.
 
 
 ### Valeurs de retour
@@ -81,6 +81,23 @@ class Home
 ```
 
 La variable `$name` sera accessible dans la vue et contiendra la valeur `"world"`.
+
+
+### Interception de vue
+
+Il est possible de changer de vue à la volée tout en transmettant l'habituel tableau de données :
+
+```php
+namespace app\controller;
+
+class Home
+{
+    public function hello()
+    {
+        return render('views/another/template.php', ['name' => 'world']);
+    }
+}
+```
 
 
 ### Auto-wire
