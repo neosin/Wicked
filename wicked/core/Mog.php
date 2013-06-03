@@ -66,35 +66,6 @@ class Mog extends MogRequest
 
 
     /**
-     * Hydrate an object with data
-     * @param $object
-     * @param array $data
-     * @param bool $force
-     */
-    public function hydrate(&$object, array $data, $force = false)
-    {
-        foreach($data as $field => $value)
-            if($force or (!$force and property_exists($object, $field)))
-                $object->{$field} = $value;
-    }
-
-
-    /**
-     * Check if dev mode
-     * @param $ip
-     * @return bool
-     */
-    public function dev($ip = null)
-    {
-        // add ip to dev mode
-        if($ip)
-            $this->_ips[] = $ip;
-
-        return in_array($this->server->remote_addr, $this->_ips);
-    }
-
-
-    /**
      * Add or get flash
      * @param $name
      * @param null $content
