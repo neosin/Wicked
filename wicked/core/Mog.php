@@ -33,10 +33,8 @@ class Mog extends MogRequest
         $this->flash = new Flash('wicked.flash');
 
         // retrieve session user
-        if(!empty($this->cookie['wicked.mog'])) {
-            $this->rank = $this->cookie['wicked.mog']['rank'];
-            $this->user = unserialize($this->cookie['wicked.mog']['user']);
-        }
+        $this->rank = isset($this->cookie['wicked.rank']) ? $this->cookie['wicked.rank'] : 0 ;
+        $this->user = isset($this->cookie['wicked.user']) ? unserialize($this->cookie['wicked.user']) : null ;
 
     }
 
@@ -100,8 +98,8 @@ class Mog extends MogRequest
      */
     public function __destruct()
     {
-        $this->cookie['wicked.mog']['rank'] = $this->rank;
-        $this->cookie['wicked.mog']['user'] = serialize($this->user);
+        setcookie('wicked.rank', $this->rank);
+        setcookie('wicked.mog', serialize($this->user));
     }
 
 }
