@@ -18,8 +18,8 @@ class Mog extends MogRequest
     /** @var mixed */
     public $user;
 
-    /** @var array */
-    protected $_ips = ['127.0.0.1', '::1'];
+    /** @var \wicked\core\Flash */
+    public $flash;
 
 
     /**
@@ -29,10 +29,13 @@ class Mog extends MogRequest
     {
         parent::__construct();
 
+        // create flash message manager
+        $this->flash = new Flash('wicked.flash');
+
         // retrieve session user
-        if(!empty($_SESSION['wicked.user'])) {
-            $this->rank = $_SESSION['wicked.user']['rank'];
-            $this->user = unserialize($_SESSION['wicked.user']['entity']);
+        if(!empty($this->session['wicked.mog'])) {
+            $this->rank = $this->session['wicked.mog']['rank'];
+            $this->user = unserialize($this->session['wicked.mog']['user']);
         }
 
     }
@@ -71,30 +74,6 @@ class Mog extends MogRequest
 
 
     /**
-     * Add or get flash
-     * @param $name
-     * @param null $content
-     * @param int $iteration
-     * @return $this|null
-     */
-    public function flash($name, $content, $iteration = 1)
-    {
-        // init
-        if(!isset($this->session['wicked.flash']))
-            $this->session['wicked.flash'] = [];
-
-        // set
-        $this->session['wicked.flash'][$name] = [
-            'content' => $content,
-            'used' => 0,
-            'max' => $iteration
-        ];
-
-        return $this;
-    }
-
-
-    /**
      * Login user
      * @param $rank
      * @param null $user
@@ -121,8 +100,8 @@ class Mog extends MogRequest
      */
     public function __destruct()
     {
-        $_SESSION['wicked.user']['rank'] = $this->rank;
-        $_SESSION['wicked.user']['entity'] = serialize($this->user);
+        $this->session['wicked.mog']['rank'] = $this->rank;
+        $this->session['wicked.mog']['user'] = serialize($this->user);
     }
 
 }

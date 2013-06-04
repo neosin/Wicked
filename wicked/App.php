@@ -43,31 +43,10 @@ class App extends Kernel implements \ArrayAccess
 
         // flash support
         $this->on('render', function($app, \wicked\core\View $view){
-
-            // add flashes to view
-            $view->set('flash', function($name) use($app){
-
-                // flash exists
-                if(!empty($this->mog->session['wicked.flash'][$name])) {
-
-                    // get flash
-                    $flash = $this->mog->session['wicked.flash'][$name];
-
-                    // remove from session
-                    if($flash['used'] + 1 >= $flash['max'])
-                        $this->mog->session['wicked.flash'][$name] = null;
-                    else
-                        $flash['used'] = $flash['used'] + 1;
-
-                    return $flash['content'];
-                }
-
-                return null;
-            });
-
+            $view->set('_flash', $app->mog->flash);
         });
 
-        // auth filter
+        // auth filter & customer view
         $this->on('build', function($app, $build, $route){
 
             // only for controller::method
