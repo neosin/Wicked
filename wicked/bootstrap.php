@@ -31,7 +31,6 @@ wicked\core\Loader::register('app', dirname($_SERVER['SCRIPT_FILENAME']));
 /**
  * Register libs
  */
-wicked\core\Loader::register('psr', dirname(__FILE__) . '/libs/psr/');
 wicked\core\Loader::register('mog', dirname(__FILE__) . '/libs/mog/');
 wicked\core\Loader::register('maestro', dirname(__FILE__) . '/libs/maestro/');
 wicked\core\Loader::register('syn', dirname(__FILE__) . '/libs/syn/');
@@ -44,6 +43,7 @@ define('APP_URL', dirname($_SERVER['SCRIPT_NAME']) . '/');
 /*
  * Init session
  */
+session_set_cookie_params(604800);
 session_start();
 
 
