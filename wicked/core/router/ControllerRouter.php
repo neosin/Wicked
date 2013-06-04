@@ -1,10 +1,10 @@
 <?php
 
-namespace wicked\preset;
+namespace wicked\core\router;
 
 use wicked\core\Router;
 
-class BundleRouter extends Router
+class ControllerRouter extends Router
 {
 
     public function __construct(array $config = [])
@@ -24,9 +24,9 @@ class BundleRouter extends Router
         if(!$config['bundle']) {
 
             $this->set(
-                ['(:action)', ''],
-                'app/controllers/' . $config['controller'] . '::(:action)',
-                'views/' . ucfirst($config['controller']) . '/(:action).php',
+                ['(:controller)/(:action)', '(:controller)', ''],
+                'app/controllers/(:Controller)::(:action)',
+                'views/(:controller)/(:action).php',
                 $config
             );
 
@@ -36,9 +36,9 @@ class BundleRouter extends Router
         else {
 
             $this->set(
-                ['(:action)', ''],
-                'app/bundles/' . $config['bundle'] . '/controllers/' . $config['controller'] . '::(:action)',
-                'bundles/' . $config['bundle'] . '/views/' . ucfirst($config['controller']) . '/(:action).php',
+                ['(:controller)/(:action)', '(:controller)', ''],
+                'app/bundles/' . $config['bundle'] . '/controllers/(:Controller)::(:action)',
+                'bundles/' . $config['bundle'] . 'views/(:controller)/(:action).php',
                 $config
             );
 

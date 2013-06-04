@@ -1,8 +1,8 @@
 <?php
 
-namespace wicked\preset\crud;
+namespace wicked\tools\crud;
 
-trait Delete
+trait Update
 {
 
     use \wicked\wire\All;
@@ -11,11 +11,11 @@ trait Delete
     public $model;
 
     /**
-     * Delete entity
+     * Update entity
      * @param $id
      * @return array
      */
-    public function delete($id)
+    public function update($id)
     {
         // parse
         $key = \wicked\tools\Inflector::classname($this->model);
@@ -29,10 +29,16 @@ trait Delete
             $this->mog->oops($key . ' [' . $id . '] not found', 404);
 
         // processing
-        $this->syn->{$key}->delete($entity);
+        if($post = $this->mog->post) {
 
-        // go to list
-        $this->mog->go('/' . $key);
+            // hydrate and save object
+            $this->mog->hydrate($entity, $post);
+            $this->syn->{$key}->save($entity);
+
+            // go to read page
+            $this->mog->go('/' . $key . '/read/' . $entity->id);
+
+        }
 
         return [$key => $entity];
     }

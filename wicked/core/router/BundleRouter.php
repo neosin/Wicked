@@ -1,6 +1,6 @@
 <?php
 
-namespace wicked\preset;
+namespace wicked\core\router;
 
 use wicked\core\Router;
 

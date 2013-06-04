@@ -1,6 +1,6 @@
 <?php
 
-namespace wicked\preset\crud;
+namespace wicked\tools\crud;
 
 trait Create
 {
