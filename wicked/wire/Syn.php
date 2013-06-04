@@ -7,7 +7,7 @@ trait Syn
 
     /**
      * @var \syn\core\ORM
-     * @context wicked.syn
+     * @wire wicked.syn
      */
     public $syn;
 

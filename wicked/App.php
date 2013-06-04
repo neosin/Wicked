@@ -83,6 +83,12 @@ class App extends Kernel implements \ArrayAccess
                 $view = Annotation::method($build[0], $build[1], 'view');
                 if($view !== null)
                     $app->mog->route->view = $view;
+
+                // auto-wire
+                foreach(get_object_vars($build[0]) as $property => $null)
+                    if($wire = Annotation::property($build[0], $property, 'wire'))
+                        $build[0]->{$property} = Registrar::run($wire);
+
             }
 
         });

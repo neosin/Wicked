@@ -80,13 +80,6 @@ class Dispatcher
             $build = [new $class(), $method];
         }
 
-        // apply auto-wiring on method
-        if(is_array($build))
-        {
-            $wire = new Wire();
-            $wire->apply($build[0]);
-        }
-
         // action not found
         if(!is_callable($build))
             throw new \RuntimeException('Action [' . (is_array($build) ? get_class($build[0]) . '::' . $build[1] : $build) . '] not found', 404);

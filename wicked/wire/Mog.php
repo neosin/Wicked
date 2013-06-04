@@ -7,7 +7,7 @@ trait Mog
 
     /**
      * @var \wicked\core\Mog
-     * @context wicked.mog
+     * @wire wicked.mog
      */
     public $mog;
 
