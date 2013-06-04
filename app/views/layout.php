@@ -1,13 +1,14 @@
 <!doctype>
 <html>
 <head>
-    <title>My Layout</title>
+    <title>My WickedApp</title>
     <?= self::meta(); ?>
     <?= self::css('layout', 'main'); ?>
+    <?= self::js('jquery-2.0.2.min', 'main'); ?>
 </head>
 <body>
 
-    <header>My Wicked App</header>
+    <header>My WickedApp</header>
 
     <div id="content">
         <?= self::content(); ?>
