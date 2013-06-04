@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-class Home
+class Front
 {
 
     use \wicked\wire\Mog;

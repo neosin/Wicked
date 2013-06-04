@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\models\Task;
 
-class Home
+class Front
 {
 
     use \wicked\wire\All;

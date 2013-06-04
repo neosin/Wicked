@@ -19,6 +19,7 @@ use wicked\core\Router;
 use wicked\core\Kernel;
 use wicked\core\View;
 use wicked\tools\Annotation;
+use wicked\preset\ControllerRouter;
 use maestro\Registrar;
 
 /**
@@ -33,7 +34,7 @@ class App extends Kernel implements \ArrayAccess
     public function __construct(Router $router = null)
     {
         // default router
-        $router = $router ?: Router::classic();
+        $router = $router ?: new ControllerRouter();
 
         // setup kernel
         parent::__construct($router);
