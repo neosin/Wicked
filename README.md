@@ -222,19 +222,19 @@ Le routeur embarque 3 configurations empiriques en fonction du type d'url souhai
 Url courte : `http://your.app/method`
 ```php
 // app\controllers\Home::(method)
-$router = wicked\core\Router::simple();
+$router = wicked\preset\ActionRouter();
 ```
 
 Url moyenne : `http://your.app/controller/method`
 ```php
 // app\controllers\(controller)::(method)
-$router = wicked\core\Router::classic();
+$router = wicked\preset\ControllerRouter();
 ```
 
 Url longue : `http://your.app/bundle/controller/method`
 ```php
 // app\bundles\(bundle)\controllers\(controller)::(method)
-$router = wicked\core\Router::bundle();
+$router = wicked\preset\BundleRouter();
 ```
 
 ### Vos règles
@@ -245,11 +245,23 @@ Malgré la présence de ces 3 presets, il est possible d'éditer vos propres rè
 $router = new wicked\core\Router();
 $router->set(
     ['(:controller)/(:action)', '(:controller)', ''],   // liste des pattern possibles avec placeholder
-    'app/controllers/(:controller)::(:action)',         // utilisation des placeholders pour définir l'action
+    'app/controllers/(:Controller)::(:action)',         // utilisation des placeholders pour définir l'action
     'views/(:controller)/(:action).php',                // utilisation des placeholders pour définir la vue
     ['controller' => 'Home', 'action' => 'index']       // valeurs par défaut si non spécifiées dans l'url
 );
 ```
+
+Chaque *placeholder* type`(:something)` est capturé dans l'url et transmis afin de construire l'action et la vue.
+De plus, chaque clé dispose de sa copie avec la première lettre en majuscule, ex:  `app/controllers/(:Controller)::(:action)` afin de concorder avec les noms de classes.
+
+Il est également possible de définir une seule règle fixe :
+
+```php
+$router = new wicked\core\Router();
+$router->set('user/(+id)/edit', 'app/controllers/User::edit');
+```
+
+Dans ce cas, grâce au placeholder type `(+arg)`, l'argument sera passé à l'action.
 
 Il suffit alors de passer le router à l'application afin de remplacer l'existant :
 
