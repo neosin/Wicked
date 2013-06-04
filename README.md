@@ -21,10 +21,10 @@ Toutes vos classes seront reconnues par **Wicked** grâce au préfixe de namespa
 ```php
 namespace app\controller;
 
-class Home {}
+class Front {}
 ```
 
-Afin de garder une simplicité optimale dans le développement de votre application, aucun controlleur ou modèle ne devra étendre de quoi que ce soit,
+Afin de garder une simplicité optimale dans le développement de votre application, aucun *contrôleur* ou *modèle* ne devra étendre de quoi que ce soit,
 vous laissant ainsi plus de liberté dans la conception de vos classes.
 
 ## Routeur
@@ -35,18 +35,18 @@ vous laissant ainsi plus de liberté dans la conception de vos classes.
 http://your.app/controller/method/args
 ```
 
-Si l'url est incomplète, par défaut le *contrôleur* sera `app\controller\Home` et la méthode `index` :
+Si l'url est incomplète, par défaut le *contrôleur* sera `app\controller\Front` et la méthode `index` :
 
 ```
-http://your.app/home/hello  => app\controller\Home::hello
-http://your.app/home        => app\controller\Home::index
-http://your.app/            => app\controller\Home::index
+http://your.app/front/hello  => app\controller\Front::hello
+http://your.app/front        => app\controller\Front::index
+http://your.app/             => app\controller\Front::index
 ```
 
 La vue appelée se base sur le même chemin que le couple contrôleur/méthode :
 
 ```
-http://your.app/home/hello     => app\views\home\hello.php
+http://your.app/front/hello  => app\views\front\hello.php
 ```
 
 Si vous souhaitez définir vos propres règles, voir la section approfondie du *Router*.
@@ -71,7 +71,7 @@ sans aucun appel d'une quelconque fonction de votre part. Ainsi :
 ```php
 namespace app\controller;
 
-class Home
+class Front
 {
     public function hello()
     {
@@ -85,12 +85,12 @@ La variable `$name` sera accessible dans la vue et contiendra la valeur `"world"
 
 ### Interception de vue
 
-Il est possible de changer de vue à la volée grâve aux annotations :
+Il est possible de changer de vue à la volée grâce à l'annotation `@view` :
 
 ```php
 namespace app\controller;
 
-class Home
+class Front
 {
 
     /** @view path/to/another/view.php */
@@ -109,19 +109,19 @@ Similaire aux EJB de Java, l'auto-wiring permet de lier automatiquement un objet
 ```php
 namespace app\controller;
 
-class Home
+class Front
 {
-    /** @context wicked.mog */
+    /** @wire wicked.mog */
     public $mog;
 }
 ```
 
 Par ce mécanisme, **Wicked** donnera automatiquement son **Mog** au contrôleur afin que l'utilisateur puisse accéder aux fonctionnalités de ce dernier.
 
-Nb : vous pouvez définir vos propres objets pouvant être accédé par l'auto-wire dans votre `index.php` grâce à la fonction :
+Nb : vous pouvez définir vos propres objets pouvant être accédé par l'auto-wire dans votre `index.php` grâce à ce mécanisme :
 
 ```php
-$app['myvar'] = $myobj; // accessible dans la PHPDoc par : @context wicked.myvar
+$app['bear'] = new Bear('graoow'); // accessible dans la PHPDoc par : @wire wicked.bear
 ```
 
 Le framework vous propose 3 traits vous permettant de lier le Mog, Syn ou les 2 en même temps :
@@ -129,7 +129,7 @@ Le framework vous propose 3 traits vous permettant de lier le Mog, Syn ou les 2 
 ```php
 namespace app\controller;
 
-class Home
+class Front
 {
     use \wicked\wire\Mog; // ou Syn, ou All
 }
@@ -138,7 +138,7 @@ class Home
 ## Vue
 
 La vue est le rendu graphique de votre application. Par défaut, **Wicked** propose un moteur de rendu en HTML.
-Par exemple pour l'action `Home::hello` :
+Par exemple pour l'action `Front::hello` :
 
 ```php
 <h1>Hello <?= $name ?> !</h1>
@@ -210,6 +210,11 @@ self::asset('img/background.png');      // pour /public/img/background.png
 ```
 
 
+### Variables réservées
+
+Wicked envoi par défaut 2 variables à toutes les vues : les messages flash `$_flash` et la session utilisateur `$_user`;
+Attention à ne pas les écraser...
+
 
 # Fonctionnement avancé
 
@@ -221,20 +226,20 @@ Le routeur embarque 3 configurations empiriques en fonction du type d'url souhai
 
 Url courte : `http://your.app/method`
 ```php
-// app\controllers\Home::(method)
-$router = wicked\preset\ActionRouter();
+// app\controllers\Front::(method)
+$router = wicked\core\router\ActionRouter();
 ```
 
 Url moyenne : `http://your.app/controller/method`
 ```php
 // app\controllers\(controller)::(method)
-$router = wicked\preset\ControllerRouter();
+$router = wicked\core\router\ControllerRouter();
 ```
 
 Url longue : `http://your.app/bundle/controller/method`
 ```php
 // app\bundles\(bundle)\controllers\(controller)::(method)
-$router = wicked\preset\BundleRouter();
+$router = wicked\core\router\BundleRouter();
 ```
 
 ### Vos règles
@@ -247,11 +252,11 @@ $router->set(
     ['(:controller)/(:action)', '(:controller)', ''],   // liste des pattern possibles avec placeholder
     'app/controllers/(:Controller)::(:action)',         // utilisation des placeholders pour définir l'action
     'views/(:controller)/(:action).php',                // utilisation des placeholders pour définir la vue
-    ['controller' => 'Home', 'action' => 'index']       // valeurs par défaut si non spécifiées dans l'url
+    ['controller' => 'Front', 'action' => 'index']       // valeurs par défaut si non spécifiées dans l'url
 );
 ```
 
-Chaque *placeholder* type`(:something)` est capturé dans l'url et transmis afin de construire l'action et la vue.
+Chaque *placeholder* type `(:key)` est capturé dans l'url et transmis afin de construire l'action et la vue.
 De plus, chaque clé dispose de sa copie avec la première lettre en majuscule, ex:  `app/controllers/(:Controller)::(:action)` afin de concorder avec les noms de classes.
 
 Il est également possible de définir une seule règle fixe :
@@ -261,15 +266,15 @@ $router = new wicked\core\Router();
 $router->set('user/(+id)/edit', 'app/controllers/User::edit');
 ```
 
-Dans ce cas, grâce au placeholder type `(+arg)`, l'argument sera passé à l'action.
+Dans ce cas, grâce au placeholder type `(+arg)`, l'argument est forcé et sera passé à l'action avant les autres arguments possibles.
 
-Il suffit alors de passer le router à l'application afin de remplacer l'existant :
+Il suffit alors d'injecter le router dans l'application :
 
 ```php
 $app = new wicked\App($router);
 ```
 
-Il est tout à fait possible de définir plusieurs règles, le routeur s'arretera sur la première qui match l'url.
+Il est tout à fait possible de définir plusieurs règles, le routeur s'arretera sur la première qui match la requête.
 
 
 ### Combinaison
@@ -278,13 +283,13 @@ Dans le cas où plusieurs règles sont à définir, et dans un soucis de lisibil
 par exemple, le cas d'une application avec front et backoffice :
 
 ```php
-// router type bundle pointant sur 'admin'
-$back = wicked\core\Router::bundle(['base' => 'admin', 'bundle' => 'back']);
+// back end : http://your.app/admin/controller/method
+$back = wicked\core\router\ControllerRouter(['base' => 'admin', 'bundle' => 'back']);
 
-// router type classique pointant sur le bundle 'front'
-$front = wicked\core\Router::classic(['bundle' => 'front']);
+// front end : http://your.app/controller/method
+$front = wicked\core\router\ControllerRouter(['bundle' => 'front']);
 
-// création du router principale
+// création du router principal
 $router = new wicked\core\Router();
 $router->bind($back);
 $router->bind($front);
@@ -317,7 +322,7 @@ namespace app\controllers;
 /**
  * @rank 8
  */
-class Home
+class Front
 {
     ...
 }
@@ -328,7 +333,7 @@ Soit directement sur la méthode :
 ```php
 namespace app\controllers;
 
-class Home
+class Front
 {
 
     /**
