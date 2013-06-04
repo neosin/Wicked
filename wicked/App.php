@@ -16,10 +16,10 @@ namespace wicked;
 
 use wicked\core\Mog;
 use wicked\core\Router;
+use wicked\core\router\ControllerRouter;
 use wicked\core\Kernel;
 use wicked\core\View;
 use wicked\tools\Annotation;
-use wicked\preset\ControllerRouter;
 use maestro\Registrar;
 
 /**
