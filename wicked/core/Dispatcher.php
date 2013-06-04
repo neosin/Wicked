@@ -60,6 +60,7 @@ class Dispatcher
     /**
      * Set response
      * @param \wicked\core\Route $route
+     * @throws \RuntimeException
      * @return mixed
      */
     public function build(Route $route)

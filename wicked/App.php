@@ -42,12 +42,25 @@ class App extends Kernel implements \ArrayAccess
         // auto register mog as dependency
         $this['mog'] = $this->mog;
 
-        // flash support
+        // enhance system
+        $this->support();
+
+    }
+
+
+    /**
+     * Enhance system
+     */
+    protected function support()
+    {
+
+        // give flash and user to view
         $this->on('render', function($app, \wicked\core\View $view){
             $view->set('_flash', $app->mog->flash);
+            $view->set('_user', $app->mog->user);
         });
 
-        // auth filter & customer view
+        // auth filter & custome view and auto-wire
         $this->on('build', function($app, $build, $route){
 
             // only for controller::method
@@ -79,12 +92,12 @@ class App extends Kernel implements \ArrayAccess
                 if(!$allowed)
                     $this->mog->oops('Action [' . get_class($build[0]) . '::' . $build[1] . '] not allowed', 403);
 
-                // custom view
+                // view in annotation
                 $view = Annotation::method($build[0], $build[1], 'view');
                 if($view !== null)
                     $app->mog->route->view = $view;
 
-                // auto-wire
+                // wire in annotation
                 foreach(get_object_vars($build[0]) as $property => $null)
                     if($wire = Annotation::property($build[0], $property, 'wire'))
                         $build[0]->{$property} = Registrar::run($wire);
@@ -92,6 +105,7 @@ class App extends Kernel implements \ArrayAccess
             }
 
         });
+
     }
 
 
