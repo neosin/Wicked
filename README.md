@@ -338,19 +338,18 @@ NB : par défaut, le rang défini par la méthode sera prioritaire sur le contr�
 
 ## Messages flash
 
-L'ajout d'un message flash s'effectue via votre ami le **Mog** :
+L'ajout d'un message flash s'effectue via votre ami le **Mog**, le nom de la méthode correspond au label du message, ainsi pour une opération réalisée avec succès :
 
 ```php
-$mog->flash('dc', 'comics');
+$mog->flash->success('Yeah !');
 ```
-
-Depuis la vue, vous pouvez récupérer le message grâce à la variable/fonction `$flash` (retourne *null* si le message n'existe pas) :
+Depuis la vue, vous pouvez récupérer le message grâce à la variable `$_flash` (retourne *null* si le message n'existe pas) :
 
 ```php
-<?= $flash('dc'); ?>
+<?= $_flash->success; ?>
 ```
 
-*NB : `$flash` devient désormais une variable réservée, attention à ne pas l'écraser !*
+*NB : `$_flash` devient désormais une variable réservée, attention à ne pas l'écraser !*
 
 
 ## Les événements
