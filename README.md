@@ -212,7 +212,7 @@ self::asset('img/background.png');      // pour /public/img/background.png
 
 ### Variables réservées
 
-Wicked envoi par défaut 2 variables à toutes les vues : les messages flash `$_flash` et la session utilisateur `$_user`;
+Wicked envoi par défaut 2 variables à toutes les vues : les messages flash `$_flash` et le mog `$_mog`;
 Attention à ne pas les écraser...
 
 

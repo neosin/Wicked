@@ -54,10 +54,10 @@ class App extends Kernel implements \ArrayAccess
     protected function support()
     {
 
-        // give flash and user to view
+        // give flash and mog to view
         $this->on('render', function($app, \wicked\core\View $view){
             $view->set('_flash', $app->mog->flash);
-            $view->set('_user', $app->mog->user);
+            $view->set('_mog', $app->mog);
         });
 
         // auth filter & custome view and auto-wire
