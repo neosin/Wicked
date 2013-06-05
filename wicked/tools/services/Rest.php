@@ -12,7 +12,7 @@
  * @date 2013-05-02
  * @version 0.1
  */
-namespace wicked\tools;
+namespace wicked\tools\services;
 
 abstract class Rest
 {

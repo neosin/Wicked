@@ -19,7 +19,7 @@ use wicked\core\Router;
 use wicked\core\router\ControllerRouter;
 use wicked\core\Kernel;
 use wicked\core\View;
-use wicked\tools\Annotation;
+use wicked\tools\meta\Annotation;
 use maestro\Registrar;
 
 /**

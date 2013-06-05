@@ -1,6 +1,6 @@
 <?php
 
-namespace wicked\tools;
+namespace wicked\tools\meta;
 
 class SilentArray extends \ArrayObject
 {

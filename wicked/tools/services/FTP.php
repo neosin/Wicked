@@ -12,7 +12,7 @@
  * @date 2013-05-15
  * @version 1
  */
-namespace wicked\tools;
+namespace wicked\tools\services;
 
 /**
  * Class FTP

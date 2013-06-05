@@ -1,6 +1,6 @@
 <?php
 
-namespace wicked\wire;
+namespace wicked\tools\wire;
 
 use maestro\Registrar;
 

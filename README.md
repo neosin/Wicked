@@ -131,7 +131,7 @@ namespace app\controller;
 
 class Front
 {
-    use \wicked\wire\Mog; // ou Syn, ou All
+    use \wicked\tools\wire\Mog; // ou Syn, ou All
 }
 ```
 
