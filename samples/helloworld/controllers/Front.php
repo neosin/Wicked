@@ -5,7 +5,7 @@ namespace app\controllers;
 class Front
 {
 
-    use \wicked\wire\Mog;
+    use \wicked\tools\wire\Mog;
 
     /**
      * Welcome page

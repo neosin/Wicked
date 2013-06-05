@@ -7,7 +7,7 @@ use app\models\Task;
 class Front
 {
 
-    use \wicked\wire\All;
+    use \wicked\tools\wire\All;
 
     /**
      * Display list

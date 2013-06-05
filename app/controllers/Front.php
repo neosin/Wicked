@@ -5,7 +5,7 @@ namespace app\controllers;
 class Front
 {
 
-    use \wicked\wire\All;
+    use \wicked\tools\wire\All;
 
     /**
      * Home
