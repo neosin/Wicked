@@ -43,7 +43,7 @@ class Router
 
             // format pattern
             $pattern = preg_replace('(\(:([a-zA-Z]+)\))', '(?<${1}>[a-zA-Z_]+)', $url); // segments
-            $pattern = preg_replace('(\(\+([a-zA-Z]+)\))', '(?<arg_${1}>.+)', $pattern); // forced args
+            $pattern = preg_replace('(\(\+([a-zA-Z]+)\))', '(?<arg_${1}>[a-zA-Z0-9-_ \+%]+)', $pattern); // forced args
 
             // add base
             if($this->_base)
@@ -53,7 +53,7 @@ class Router
             $pattern = str_replace('/', '\/', $pattern);
 
             // args
-            $pattern .= '(?<args>(\/[a-zA-Z0-9]+)*)';
+            $pattern .= '(?<args>(\/[a-zA-Z0-9-_ \+%]+)*)';
 
             // wrap
             $pattern = '/^' . $pattern . '$/';
