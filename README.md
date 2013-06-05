@@ -19,7 +19,7 @@ $app->run();
 Toutes vos classes seront reconnues par **Wicked** grâce au préfixe de namespace `app\`. Par exemple pour votre contrôleur par défaut :
 
 ```php
-namespace app\controller;
+namespace app\controllers;
 
 class Front {}
 ```
@@ -35,12 +35,12 @@ vous laissant ainsi plus de liberté dans la conception de vos classes.
 http://your.app/controller/method/args
 ```
 
-Si l'url est incomplète, par défaut le *contrôleur* sera `app\controller\Front` et la méthode `index` :
+Si l'url est incomplète, par défaut le *contrôleur* sera `app\controllers\Front` et la méthode `index` :
 
 ```
-http://your.app/front/hello  => app\controller\Front::hello
-http://your.app/front        => app\controller\Front::index
-http://your.app/             => app\controller\Front::index
+http://your.app/front/hello  => app\controllers\Front::hello
+http://your.app/front        => app\controllers\Front::index
+http://your.app/             => app\controllers\Front::index
 ```
 
 La vue appelée se base sur le même chemin que le couple contrôleur/méthode :
@@ -55,7 +55,7 @@ Si vous souhaitez définir vos propres règles, voir la section approfondie du *
 
 ## Requête
 
-Le framework utilise la librairie **Mog** pour la gestion de la requête et des données utilisateur.
+Le framework utilise la librairie **Mog** pour la gestion de la requête et des données utilisateur, [voir la doc](https://github.com/WickedYeti/Mog).
 
 
 ## Action
@@ -69,7 +69,7 @@ Dans le cadre du pattern MVP, **Wicked** prendra les valeurs de retour de la mé
 sans aucun appel d'une quelconque fonction de votre part. Ainsi :
 
 ```php
-namespace app\controller;
+namespace app\controllers;
 
 class Front
 {
@@ -88,7 +88,7 @@ La variable `$name` sera accessible dans la vue et contiendra la valeur `"world"
 Il est possible de changer de vue à la volée grâce à l'annotation `@view` :
 
 ```php
-namespace app\controller;
+namespace app\controllers;
 
 class Front
 {
@@ -107,7 +107,7 @@ class Front
 Similaire aux EJB de Java, l'auto-wiring permet de lier automatiquement un objet à un attribut d'une classe grâce à la PHPDoc de ce dernier :
 
 ```php
-namespace app\controller;
+namespace app\controllers;
 
 class Front
 {
@@ -127,7 +127,7 @@ $app['bear'] = new Bear('graoow'); // accessible dans la PHPDoc par : @wire wick
 Le framework vous propose 3 traits vous permettant de lier le Mog, Syn ou les 2 en même temps :
 
 ```php
-namespace app\controller;
+namespace app\controllers;
 
 class Front
 {
@@ -412,5 +412,83 @@ Voici la liste des événements :
 - `set.service`
 - `get.service`
 
+
+## Outils
+
+Wicked embarque un certains nombres d'outils utiles dans les cas d'applications les plus fréquents :
+
+- Lipsum
+- Mail
+- FTP
+- URL
+- String
+- Date
+- Singleton
+- Annotation
+- ...
+
+Parmis ces outils, l'outils CRUD, vous permettra d'automatiser les tâches chronophages de lecture, écrite, mise à jours et suppression d'une entité :
+
+```php
+namespace app\controllers;
+
+use wicked\tools\actions\CRUD;
+
+class Item
+{
+
+    use \wicked\tools\wire\All;
+
+    public $crud;
+
+    public function __construct()
+    {
+        $this->crud = new CRUD('item', 'app\models\Item');
+    }
+
+}
+```
+
+Une fois l'outils chargé, il vous propose 5 fonctions à placer dans vos méthodes :
+
+```php
+public function index()
+{
+    $items = $this->crud->read();
+    return ['items' => $items];
+}
+
+public function show($id)
+{
+    $item = $this->crud->read($id);
+    return ['item' => $item];
+}
+
+public function create()
+{
+    if($post = $this->mog->post) {
+        $item = $this->crud->create($post);
+        $this->mog->go('item/edit/' . $item->id);
+    }
+}
+
+public function edit($id)
+{
+    $item = $this->crud->read($id);
+
+    if($post = $this->mog->post)
+        $item = $this->crud->update($id, $post);
+
+    return ['item' => $item];
+}
+
+public function delete($id)
+{
+    $this->crud->delete($id);
+}
+```
+
+Toutes ces fonctions s'occupent notamment de vérifier si l'entité existe, si elle est valide
+et se charge de l'opération en base de donnée via **Syn**, elle renvoient false si l'opération à échouée.
 
 ## next : coming soon...
