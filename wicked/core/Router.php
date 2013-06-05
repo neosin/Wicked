@@ -135,16 +135,16 @@ class Router
         if($route->defaults)
             $route->data += $route->defaults;
 
-        // duplicate data with ucfirst
-        foreach($route->data as $key => $value)
-            $route->data[ucfirst($key)] = ucfirst($value);
-
         // resolve action and view
         foreach($route->data as $key => $value) {
 
             // resolve action
-            $route->action = str_replace('(:'.$key.')', $value, $route->action);
-            $route->view = str_replace('(:'.$key.')', $value, $route->view);
+            $route->action = str_replace('(:' . $key . ')', $value, $route->action);
+            $route->action = str_replace('(:' . ucfirst($key) . ')', ucfirst($value), $route->action);
+
+            // resolve view
+            $route->view = str_replace('(:' . $key . ')', $value, $route->view);
+            $route->view = str_replace('(:' . ucfirst($key) . ')', ucfirst($value), $route->view);
 
         }
 
