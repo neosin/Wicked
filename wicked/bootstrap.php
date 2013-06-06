@@ -80,3 +80,83 @@ function debug()
 {
     die(call_user_func_array('var_dump', func_get_args()));
 }
+
+
+/**
+ * Session helper
+ * @param null $name
+ * @param null $value
+ * @return mixed|\wicked\core\helper\Session
+ */
+function session($name = null, $value = null)
+{
+    static $session;
+
+    // create session entity
+    if(!$session)
+        $session = new wicked\core\helper\Session('wicked.session');
+
+    // case 1 : get object
+    if(!$name)
+        return $session;
+
+    // case 2 : get value
+    elseif($name and !$value)
+        return $session->get($name);
+
+    // case 3 : set value
+    $session->set($name, $value);
+}
+
+
+/**
+ * Flash helper
+ * @param $name
+ * @param null $value
+ * @return mixed|\wicked\core\helper\Session
+ */
+function flash($name, $value = null)
+{
+    static $session;
+
+    // create session entity
+    if(!$session)
+        $session = new wicked\core\helper\Session('wicked.flash');
+
+    // case 1 : get flash
+    if(!$value) {
+        $message = $session->get($name);
+        $session->clear($name);
+        return $message;
+    }
+
+    // case 2 : set flash
+    $session->set($name, $value);
+}
+
+
+/**
+ * User helper
+ * @param $key
+ * @param null $value
+ * @return mixed|\wicked\core\helper\Session
+ */
+function user($key, $value = null)
+{
+    static $session;
+
+    // create session entity
+    if(!$session)
+        $session = new wicked\core\helper\Session('wicked.user');
+
+    // case 1 : get entity
+    if(!$key)
+        return $session->get('entity');
+
+    // case 2 : get value
+    elseif($key and !$value)
+        return $session->get($key);
+
+    // case 3 : set value
+    $session->set($key, $value);
+}
