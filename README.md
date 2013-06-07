@@ -533,7 +533,7 @@ En exemple, l'exception `404` soulevée par **Wicked** est redirigée sur le flu
 ```php
 $app = new wicked\App();
 
-$app->on('404', function($app, $message) {
+$app->on(404, function($app, $message) {
     die('Good day to die ! Because : ' . $message);
 });
 
@@ -572,13 +572,13 @@ Voici la liste des événements :
 Les exceptions sont interprétées en tant que qu'évènements, ainsi vous pouvez générer vos propres exceptions :
 
 ```php
-opps('This is my awesome message !', 999);
+oops('This is my awesome message !', 999);
 ```
 
 Et récupérer avec :
 
 ```php
-$app->on('999', function($app, $message) { ... });
+$app->on(999, function($app, $message) { ... });
 ```
 
 
@@ -595,6 +595,32 @@ Wicked embarque un certains nombres d'outils utiles dans les cas d'applications 
 - Singleton
 - Annotation
 - ...
+
+Lipsum
+:   Génère des faux textes, titres, paragraphes, lignes, emails en *Lorem Ipsum*
+
+Mail
+:   Classe d'envoi de mail simple et efficace
+
+FTP
+:   Un connecteur FTP
+
+URL
+:   Un parseur est buildeur d'URL
+
+String
+:   Un ensemble de fonction de transformation de string
+
+Date
+:   Déclinaison française de la gestion de date
+
+Singleton
+:   Un trait très utile...
+
+Annotation
+:   Parser d'annotation pour classe, propriété ou méthode
+
+Et d'autre...
 
 Parmis ces outils, l'outils CRUD, vous permettra d'automatiser les tâches chronophages de lecture, écrite, mise à jours et suppression d'une entité :
 
