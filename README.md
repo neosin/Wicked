@@ -67,17 +67,6 @@ session()->clear('foo');    // efface une donnée
 session()->clear();         // efface entièrement la session
 ```
 
-Gestion de l'utilisateur :
-
-```php
-auth($user, 9);         // log un objet utilisateur avec un rang
-auth(false);            // déconnecte l'utilisateur
-
-user();                 // accède à l'entité définit par login()
-$rank = user('rank');   // récupère le rang
-user('rank', 5);        // re-définit le rang
-```
-
 Messages flash (attention, la récupération consomme le message, il ne sera plus disponible) :
 
 ```php
@@ -344,6 +333,13 @@ $mog->route->data;      // les placeholders de l'url
 
 ## Authentification
 
+Un helper permet d'authentifier l'utilisateur courant de manière simple :
+
+```php
+auth($user, 9);         // log un objet utilisateur avec un rang
+auth(false);            // déconnecte l'utilisateur
+```
+
 Dans le cas où certaines actions sont strictement protégées pour un certain rang, la gestion se fait par annotation soit sur le contrôleur en entier :
 
 ```php
@@ -378,9 +374,14 @@ class Front
 ```
 
 Cette annotation sera comparée à `user('rank');` afin de déterminer si l'utilisateur a le droit ou non d'accéder à cette action (supérieur ou égal).
-Dans le cas contraire, un événement `403` est déclenché.
+Dans le cas contraire, un événement `403` est déclenché *(par défaut, le rang défini par la méthode sera prioritaire sur le contrôleur)*.
 
-NB : par défaut, le rang défini par la méthode sera prioritaire sur le contrôleur.
+Il est possible d'accéder à l'objet utilisateur de n'importe où grâce à la fonction suivante (principalement utile dans les vues) :
+
+```php
+user();                 // accède à l'entité définit par login()
+$rank = user('rank');   // accède au rang)
+```
 
 
 ## Les événements
