@@ -3,9 +3,7 @@
 Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
 
-## Quickstart
-
-Nous allons utiliser l'exemple du célèbre HelloWorld afin de couvrir l'utilisation *basique* de **Wicked**.
+## Bootstrap
 
 Le fichier `bootstrap.php` permet d'inclure les librairies et mécanismes de **Wicked** dans votre projet et ainsi d'appeler les classes nécessaires à votre application :
 
@@ -16,20 +14,243 @@ $app = new wicked\App();
 $app->run();
 ```
 
-Toutes vos classes seront reconnues par **Wicked** grâce au préfixe de namespace `app\`. Par exemple pour votre contrôleur par défaut :
+Toutes vos classes seront reconnues par **Wicked** grâce au *vendor* `app\` :
+
+```php
+namespace app\foo;
+
+class Bar {}
+```
+
+L'objectif principal de **Wicked** est de garder une simplicité optimale dans le développement de votre application, ainsi aucun *contrôleur* ou *modèle* ne devra étendre de quoi que ce soit,
+vous laissant ainsi plus de liberté dans la conception de vos classes.
+
+
+## Orgnisation du projet
+
+**Wicked** n'impose aucune organisation particulière mais se repose sur une norme par *convention*.
+Il est cependant conseillé d'utilise une organisation de projet MVP classique :
+
+```
+/app
+    /controllers
+        Front.php
+    /libs
+    /models
+    /public
+        /css
+        /images
+        /js
+    /views
+        /front
+            index.php
+        layout.php
+    index.php
+    .htaccess
+/wicked
+```
+
+
+## Procéssus
+
+Le procéesus d'un framework MVP est relativement simple :
+
+```
+Requête -> Action -> Vue
+```
+
+Nous allons définir, étape par étape, les différentes classes et fichiers nécessaire à ce processus.
+
+
+## Définir vos actions
+
+Le coeur d'une application sont les actions et services, la `business layer` . Dans une architecture MVP, les actions sont matérialisées par des *contrôleurs* et des *méthodes*.
+Nous allons prendre l'exemple d'un `FrontController` (le point d'entrée de votre application) :
 
 ```php
 namespace app\controllers;
 
-class Front {}
+class Front
+{
+
+    public function index()
+    {
+
+    }
+
+    public function hello($name)
+    {
+        // do some stuff
+
+        return ['name' => $name];
+    }
+
+}
 ```
 
-Afin de garder une simplicité optimale dans le développement de votre application, aucun *contrôleur* ou *modèle* ne devra étendre de quoi que ce soit,
-vous laissant ainsi plus de liberté dans la conception de vos classes.
+Dans notre contrôleur, nous avons 2 actions disponibles : `index` et `hello`, dont la dernière renvoyant un tableau de données, qui sera passé à la vue dans la suite du processus.
+
+## Requête
+
+**Wicked** utilise la libraire [Mog](https://github.com/WickedYeti/Mog) pour gérer la requête ainsi qu'un ensemble d'helpers :
+
+Accès à la session :
+
+```php
+namespace app\controllers;
+
+class Front
+{
+
+    public function index()
+    {
+        session('foo', 'bar');      // définit une donnée
+        $foo = session('foo');      // accède à une donnée
+        session()->clear('foo');    // efface une donnée
+        session()->clear();         // efface entièrement la session
+    }
+
+}
+```
+
+Messages flash (attention, la récupération **consomme** le message, il ne sera plus disponible) :
+
+```php
+# controllers/Front.php
+namespace app\controllers;
+
+class Front
+{
+
+    public function index()
+    {
+        flash('success', 'Yeah !');
+    }
+
+}
+```
+
+```php
+# views/front/index.php
+<?php if($message = flash('success'): ?>
+<div class="flash">
+    <?= $message ?>
+</div>
+<?php endif; ?>
+```
+
+Données formulaires :
+
+```php
+namespace app\controllers;
+
+class Front
+{
+
+    public function search()
+    {
+        if(post()) {
+            $query = post('query'); // récupère un champ
+            doSearch($query);
+        }
+    }
+
+    public function edit($id)
+    {
+        $user = getUser($id);
+        hydrate($user, post()); // hydrate l'objet avec les données POST
+        doSave($user);
+    }
+
+}
+```
+
+Rediriger :
+
+```php
+namespace app\controllers;
+
+class Front
+{
+
+    public function index()
+    {
+        go('/not/available');
+    }
+
+}
+```
+
+
+## Créer votre vue
+
+L'action, correctement effectuée, peut éventuellement renvoyer des données, il est temps de les affichers dans notre vue. Prenons l'exemple de l'action `Front::hello($name)` :
+
+```php
+# views/front/hello.php
+<h1>Hello <?= $name ?> !</h1>
+```
+
+### Layout
+
+Il arrive très frequemment que plusieurs vues utilisent un *layout* commun afin de ne pas dupliquer le code.
+Nous allons donc créer le fichier `views/layout.php` :
+
+```php
+<!doctype html>
+<html>
+    <head>
+        <title>My first WickedApp !</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <?= self::content(); ?>
+    </body>
+</html>
+```
+
+Et définir dans la vue quel *layout* nous allons utiliser :
+
+```php
+<?php self::layout('views/layout.php'); ?>
+
+<h1>Hello <?= $name ?> !</h1>
+```
+
+Grâce à ce mécanisme, le contenu de la vue sera afficher dans le layout à la place du self::content();
+
+### Assets
+
+3 fonctions sont disponibles afin de facilité l'appel de fichiers publics :
+
+```php
+self::css('layout');                    // pour /public/css/layout.css
+self::js('jquery', 'main');             // pour /public/js/jquery.js et /public/js/main.js
+self::asset('img/background.png');      // pour /public/img/background.png
+```
+
+Exemple :
+
+```php
+<!doctype html>
+<html>
+    <head>
+        <title>My first WickedApp !</title>
+        <meta charset="utf-8">
+        <?= self::css('layout'); ?>
+        <?= self::js('jquery'); ?>
+    </head>
+    <body>
+        <?= self::content(); ?>
+    </body>
+</html>
+```
+
 
 ## Routeur
 
-**Wicked** initialise un routeur classique avec la règle suivante :
+Nos actions et nos vues sont prêtes ! Il est temps de comprendre comment le router va définir l'action à executer en fonction de la requête.
+Par défaut, le router va appliquer la règle empirique :
 
 ```
 http://your.app/controller/method/args
@@ -46,82 +267,38 @@ http://your.app/             => app\controllers\Front::index
 La vue appelée se base sur le même chemin que le couple contrôleur/méthode :
 
 ```
-http://your.app/front/hello  => app\views\front\hello.php
+http://your.app/front/hello  => app/views/front/hello.php
 ```
 
-Si vous souhaitez définir vos propres règles, voir la section approfondie du *Router*.
-
-
-
-## Requête
-
-Le framework utilise la librairie **Mog** pour la gestion de la requête et des données utilisateur, [voir la doc](https://github.com/WickedYeti/Mog).
-Cependant, un lot d'helpers vous permet d'accéder plus facilement aux données globales.
-
-Accès à la session :
+Tous les segments présent en plus deviennent des arguments qui seront passés à la méthode, ainsi pour `http://your.app/front/hello/yeti` :
 
 ```php
-session('foo', 'bar');      // définit une donnée
-$foo = session('foo');      // accède à une donnée
-session()->clear('foo');    // efface une donnée
-session()->clear();         // efface entièrement la session
+namepsace app\controllers;
+
+class Front
+{
+    public function hello($name) // $name = 'yeti'
+    {
+        return ['name' => $name];
+    }
+}
 ```
 
-Messages flash (attention, la récupération consomme le message, il ne sera plus disponible) :
 
-```php
-flash('success', 'Yeah !');     // ajouter un message
-$message = flash('success');    // consomme un message
-```
+## Plop !
 
-Données formulaires :
+C'est fini ! Votre application est en état de marche ;)
+Vous pouvez désormais consulter la rubrique de fonctionnement avancé, il vous reste encore plein de fonctionnalités à découvrir !
 
-```php
-$username = post('username');   // récupère une champ du formulaire
-```
 
-Rediriger :
 
-```php
-go('user/list');    // redirige vers http://your.app/user/list
-```
-
-Accéder au Mog et à Syn :
-
-```php
-mog();
-syn();
-```
-
+# Fonctionnement avancé
 
 ## Action
 
-Trois comportements spécifiques sont à connaitre quant aux contrôleurs : les valeurs de retour, l'interception de vue et l'auto-wiring.
-
-
-### Valeurs de retour
-
-Dans le cadre du pattern MVP, **Wicked** prendra les valeurs de retour de la méthode appelée afin de les transmettre à la vue indiquée par le routeur,
-sans aucun appel d'une quelconque fonction de votre part. Ainsi :
-
-```php
-namespace app\controllers;
-
-class Front
-{
-    public function hello()
-    {
-        return ['name' => 'world'];
-    }
-}
-```
-
-La variable `$name` sera accessible dans la vue et contiendra la valeur `"world"`.
-
-
 ### Interception de vue
 
-Il est possible de changer de vue à la volée grâce à l'annotation `@view` :
+Il est possible de changer de vue à la volée dans les contrôleurs grâce à l'annotation `@view` :
 
 ```php
 namespace app\controllers;
@@ -129,14 +306,15 @@ namespace app\controllers;
 class Front
 {
 
-    /** @view path/to/another/view.php */
+    /**
+     * @view path/to/another/view.php
+     */
     public function hello()
     {
         return ['name' => 'world'];
     }
 }
 ```
-
 
 ### Auto-wire
 
@@ -154,48 +332,15 @@ namespace app\controllers;
 
 class Front
 {
-    /** @wire wicked.bear */
+    /**
+     * @wire wicked.bear
+     */
     public $bear;
 }
 ```
 
 
 ## Vue
-
-La vue est le rendu graphique de votre application. Par défaut, **Wicked** propose un moteur de rendu en HTML.
-Par exemple pour l'action `Front::hello` :
-
-```php
-<h1>Hello <?= $name ?> !</h1>
-```
-
-
-### Layout
-
-Il arrive très frequemment que plusieurs vues utilisent un *layout* commun afin de ne pas dupliquer le code.
-Dans ce cas, il est nécessaire d'indiquer à la vue quel *layout* utiliser :
-
-```php
-<?php self::layout('views/layout.php'); ?>
-
-<h1>Hello <?= $name ?> !</h1>
-```
-
-Et également au layout, où afficher la vue :
-
-```php
-<!doctype html>
-<html>
-    <head>
-        <title>My first WickedApp !</title>
-        <meta charset="utf-8">
-    </head>
-    <body>
-        <?= self::content(); ?>
-    </body>
-</html>
-```
-
 
 ### Slot / Hook
 
@@ -224,19 +369,6 @@ self::slot('username', 'WickedYeti');
 ```
 
 
-### Assets
-
-3 fonctions sont disponibles pour la gestion des fichiers externes :
-
-```php
-self::css('layout');                    // pour /public/css/layout.css
-self::js('jquery', 'main');             // pour /public/js/jquery.js et /public/js/main.js
-self::asset('img/background.png');      // pour /public/img/background.png
-```
-
-
-# Fonctionnement avancé
-
 ## Router
 
 ### Les presets
@@ -249,7 +381,7 @@ Url courte : `http://your.app/method`
 $router = wicked\core\router\ActionRouter();
 ```
 
-Url moyenne : `http://your.app/controller/method`
+Url moyenne : `http://your.app/controller/method` (router par défaut)
 ```php
 // app\controllers\(controller)::(method)
 $router = wicked\core\router\ControllerRouter();
@@ -278,7 +410,7 @@ $router->set(
 Chaque *placeholder* type `(:key)` est capturé dans l'url et transmis afin de construire l'action et la vue.
 De plus, chaque clé dispose de sa copie avec la première lettre en majuscule, ex:  `app/controllers/(:Controller)::(:action)` afin de concorder avec les noms de classes.
 
-Il est également possible de définir une seule règle fixe :
+Il est également possible de définir des règles fixes :
 
 ```php
 $router = new wicked\core\Router();
@@ -333,11 +465,33 @@ $mog->route->data;      // les placeholders de l'url
 
 ## Authentification
 
-Un helper permet d'authentifier l'utilisateur courant de manière simple :
+Un helper permet d'authentifier l'utilisateur courant et son rang de manière simple :
 
 ```php
-auth($user, 9);         // log un objet utilisateur avec un rang
-auth(false);            // déconnecte l'utilisateur
+namespace app\controllers;
+
+class User
+{
+
+    public function login()
+    {
+        $user = getUser();
+        auth($user, 9);
+    }
+
+    public function logout()
+    {
+        auth(false);
+    }
+
+}
+```
+
+Une fois connecté, on peut accéder à l'utilisateur courant et son range grâce à la fonction `user()` :
+
+```php
+$user = user();         // accède à l'entité définit par auth()
+$rank = user('rank');   // accède au rang
 ```
 
 Dans le cas où certaines actions sont strictement protégées pour un certain rang, la gestion se fait par annotation soit sur le contrôleur en entier :
@@ -375,13 +529,6 @@ class Front
 
 Cette annotation sera comparée à `user('rank');` afin de déterminer si l'utilisateur a le droit ou non d'accéder à cette action (supérieur ou égal).
 Dans le cas contraire, un événement `403` est déclenché *(par défaut, le rang défini par la méthode sera prioritaire sur le contrôleur)*.
-
-Il est possible d'accéder à l'objet utilisateur de n'importe où grâce à la fonction suivante (principalement utile dans les vues) :
-
-```php
-user();                 // accède à l'entité définit par auth()
-$rank = user('rank');   // accède au rang
-```
 
 
 ## Les événements
