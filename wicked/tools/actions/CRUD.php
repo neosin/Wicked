@@ -2,7 +2,7 @@
 
 namespace wicked\tools\actions;
 
-class CRUD extends Action
+class CRUD
 {
 
     /** @var string */
@@ -19,7 +19,6 @@ class CRUD extends Action
     {
         $this->key = $key;
         $this->model = $model;
-        parent::__construct();
     }
 
 
@@ -35,8 +34,8 @@ class CRUD extends Action
         $entity = new $class();
 
         // hydrate and save object
-        $this->mog->hydrate($entity, $data);
-        $success = $this->syn->{$this->key}->save($entity);
+        hydrate($entity, $data);
+        $success = syn()->{$this->key}->save($entity);
 
         return $success ? $entity : false;
     }
@@ -51,10 +50,10 @@ class CRUD extends Action
     {
         // listing
         if(is_null($id))
-            return $this->syn->{$this->key}->find();
+            return syn()->{$this->key}->find();
 
         // get entity
-        if($entity = $this->syn->{$this->key}->find($id))
+        if($entity = syn()->{$this->key}->find($id))
             return $entity;
 
         // entity not found
@@ -71,15 +70,15 @@ class CRUD extends Action
     protected function update($id, $data)
     {
         // get entity
-        $entity = $this->syn->{$this->key}->find($id);
+        $entity = syn()->{$this->key}->find($id);
 
         // not exist
         if(!$entity)
             return false;
 
         // hydrate and save object
-        $this->mog->hydrate($entity, $data);
-        $success = $this->syn->{$this->key}->save($entity);
+        hydrate($entity, $data);
+        $success = syn()->{$this->key}->save($entity);
 
         return $success ? $entity : false;
     }
@@ -93,14 +92,14 @@ class CRUD extends Action
     protected function delete($id)
     {
         // get entity
-        $entity = $this->syn->{$this->key}->find($id);
+        $entity = syn()->{$this->key}->find($id);
 
         // not exist
         if(!$entity)
             return false;
 
         // delete object
-        $success = $this->syn->{$this->key}->delete($entity);
+        $success = syn()->{$this->key}->delete($entity);
 
         return $success;
     }

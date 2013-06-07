@@ -56,6 +56,53 @@ Si vous souhaitez définir vos propres règles, voir la section approfondie du *
 ## Requête
 
 Le framework utilise la librairie **Mog** pour la gestion de la requête et des données utilisateur, [voir la doc](https://github.com/WickedYeti/Mog).
+Cependant, un lot d'helpers vous permet d'accéder plus facilement aux données globales.
+
+Accès à la session :
+
+```php
+session('foo', 'bar');      // définit une donnée
+$foo = session('foo');      // accède à une donnée
+session()->clear('foo');    // efface une donnée
+session()->clear();         // efface entièrement la session
+```
+
+Gestion de l'utilisateur :
+
+```php
+auth($user, 9);         // log un objet utilisateur avec un rang
+auth(false);            // déconnecte l'utilisateur
+
+user();                 // accède à l'entité définit par login()
+$rank = user('rank');   // récupère le rang
+user('rank', 5);        // re-définit le rang
+```
+
+Messages flash (attention, la récupération consomme le message, il ne sera plus disponible) :
+
+```php
+flash('success', 'Yeah !');     // ajouter un message
+$message = flash('success');    // consomme un message
+```
+
+Données formulaires :
+
+```php
+$username = post('username');   // récupère une champ du formulaire
+```
+
+Rediriger :
+
+```php
+go('user/list); // redirige vers http://your.app/user/list
+```
+
+Accéder au Mog et à Syn :
+
+```php
+mog();
+syn();
+```
 
 
 ## Action
@@ -104,36 +151,25 @@ class Front
 
 ### Auto-wire
 
-Similaire aux EJB de Java, l'auto-wiring permet de lier automatiquement un objet à un attribut d'une classe grâce à la PHPDoc de ce dernier :
+Similaire aux EJB de Java, l'auto-wiring permet de lier automatiquement un objet à un attribut d'une classe grâce à la PHPDoc de ce dernier.
+Vous pouvez définir vos propres objets pouvant être accédé par l'auto-wire dans votre `index.php` grâce à ce mécanisme :
+
+```php
+$app['bear'] = new Bear('graoow');
+```
+
+Par ce mécanisme, **Wicked** donnera automatiquement son **Bear** au contrôleur afin que l'utilisateur puisse accéder aux fonctionnalités de ce dernier.
 
 ```php
 namespace app\controllers;
 
 class Front
 {
-    /** @wire wicked.mog */
-    public $mog;
+    /** @wire wicked.bear */
+    public $bear;
 }
 ```
 
-Par ce mécanisme, **Wicked** donnera automatiquement son **Mog** au contrôleur afin que l'utilisateur puisse accéder aux fonctionnalités de ce dernier.
-
-Nb : vous pouvez définir vos propres objets pouvant être accédé par l'auto-wire dans votre `index.php` grâce à ce mécanisme :
-
-```php
-$app['bear'] = new Bear('graoow'); // accessible dans la PHPDoc par : @wire wicked.bear
-```
-
-Le framework vous propose 3 traits vous permettant de lier le Mog, Syn ou les 2 en même temps :
-
-```php
-namespace app\controllers;
-
-class Front
-{
-    use \wicked\tools\wire\Mog; // ou Syn, ou All
-}
-```
 
 ## Vue
 
@@ -208,12 +244,6 @@ self::css('layout');                    // pour /public/css/layout.css
 self::js('jquery', 'main');             // pour /public/js/jquery.js et /public/js/main.js
 self::asset('img/background.png');      // pour /public/img/background.png
 ```
-
-
-### Variables réservées
-
-Wicked envoi par défaut 2 variables à toutes les vues : les messages flash `$_flash` et le mog `$_mog`;
-Attention à ne pas les écraser...
 
 
 # Fonctionnement avancé
@@ -347,26 +377,10 @@ class Front
 }
 ```
 
-Cette annotation sera comparée à `$mog->user->rank` afin de déterminer si l'utilisateur a le droit ou non d'accéder à cette action (supérieur ou égal).
+Cette annotation sera comparée à `user('rank');` afin de déterminer si l'utilisateur a le droit ou non d'accéder à cette action (supérieur ou égal).
 Dans le cas contraire, un événement `403` est déclenché.
 
 NB : par défaut, le rang défini par la méthode sera prioritaire sur le contrôleur.
-
-
-## Messages flash
-
-L'ajout d'un message flash s'effectue via votre ami le **Mog**, le nom de la méthode correspond au label du message, ainsi pour une opération réalisée avec succès :
-
-```php
-$mog->flash->success('Yeah !');
-```
-Depuis la vue, vous pouvez récupérer le message grâce à la variable `$_flash` (retourne *null* si le message n'existe pas) :
-
-```php
-<?= $_flash->success; ?>
-```
-
-*NB : `$_flash` devient désormais une variable réservée, attention à ne pas l'écraser !*
 
 
 ## Les événements
@@ -413,6 +427,19 @@ Voici la liste des événements :
 - `get.service`
 
 
+Les exceptions sont interprétées en tant que qu'évènement, ainsi vous pouvez générer vos propres exceptions :
+
+```php
+opps('This is my awesome message !', 999);
+```
+
+Et récupérer avec :
+
+```php
+$app->on('999', function($app, $message) { ... });
+```
+
+
 ## Outils
 
 Wicked embarque un certains nombres d'outils utiles dans les cas d'applications les plus fréquents :
@@ -428,6 +455,8 @@ Wicked embarque un certains nombres d'outils utiles dans les cas d'applications 
 - ...
 
 Parmis ces outils, l'outils CRUD, vous permettra d'automatiser les tâches chronophages de lecture, écrite, mise à jours et suppression d'une entité :
+
+**Attention, cet outils est encore en version beta**
 
 ```php
 namespace app\controllers;
@@ -466,9 +495,9 @@ public function show($id)
 
 public function create()
 {
-    if($post = $this->mog->post) {
+    if(post()) {
         $item = $this->crud->create($post);
-        $this->mog->go('item/edit/' . $item->id);
+        go('item/edit/' . $item->id);
     }
 }
 
@@ -476,7 +505,7 @@ public function edit($id)
 {
     $item = $this->crud->read($id);
 
-    if($post = $this->mog->post)
+    if(post())
         $item = $this->crud->update($id, $post);
 
     return ['item' => $item];

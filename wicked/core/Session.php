@@ -1,12 +1,12 @@
 <?php
 
-namespace wicked\core\helper;
+namespace wicked\core;
 
 class Session
 {
 
     /** @var string */
-    protected $_repository;
+    protected $_root;
 
     /** @var bool */
     protected $_silent;
@@ -17,9 +17,9 @@ class Session
      * @param $repository
      * @param bool $silent
      */
-    public function Session($repository, $silent = true)
+    public function __construct($repository, $silent = true)
     {
-        $this->_repository = $repository;
+        $this->_root = $repository;
         $this->_silent = $silent;
     }
 
@@ -32,10 +32,10 @@ class Session
      */
     public function get($name)
     {
-        if(isset($_SESSION[$this->_repository][$name])) {
+        if(isset($_SESSION[$this->_root][$name])) {
 
             // get data
-            $data = $_SESSION[$this->_repository][$name];
+            $data = $_SESSION[$this->_root][$name];
 
             // unserialize
             return static::serialized($data)
@@ -54,7 +54,7 @@ class Session
      */
     public function set($name, $value)
     {
-        $_SESSION[$this->_repository][$name] = is_scalar($value) ? $value : serialize($value);
+        $_SESSION[$this->_root][$name] = is_scalar($value) ? $value : serialize($value);
     }
 
 
@@ -66,8 +66,8 @@ class Session
         if($name) {
 
             // unset data
-            if(isset($_SESSION[$this->_repository][$name]))
-                unset($_SESSION[$this->_repository][$name]);
+            if(isset($_SESSION[$this->_root][$name]))
+                unset($_SESSION[$this->_root][$name]);
 
             // data does not exist
             elseif(!$this->_silent)
@@ -80,7 +80,7 @@ class Session
         }
 
         // remove all
-        $_SESSION[$this->_repository] = [];
+        $_SESSION[$this->_root] = [];
     }
 
 

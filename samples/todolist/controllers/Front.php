@@ -15,7 +15,7 @@ class Front
     public function index()
     {
         // get all task
-        $list = $this->syn->task->find();
+        $list = syn()->task->find();
 
         // give to view
         return ['list' => $list];
@@ -29,15 +29,15 @@ class Front
     {
 
         // submit add
-        if($this->mog->post) {
+        if(post()) {
 
             // create task
             $task = new Task();
-            $task->content = $this->mog->post['content'];
+            $task->content = post('content');
 
             // persist
-            $this->syn->task->save($task);
-            $this->mog->home();
+            syn()->task->save($task);
+            go('/');
         }
 
     }
@@ -52,21 +52,21 @@ class Front
     {
 
         // retrieve task
-        $task = $this->syn->task->find($id);
+        $task = syn()->task->find($id);
 
         // 404
         if(!$task)
-            $this->mog->oops('This task does not exist !', 404);
+            oops('This task does not exist !', 404);
 
         // submit edit
-        if($this->mog->post) {
+        if(post()) {
 
             // updata
-            $task->content = $this->mog->post['content'];
+            $task->content = post('content');
 
             // persist
-            $this->syn->task->save($task);
-            $this->mog->home();
+            syn()->task->save($task);
+            go('/');
 
         }
 
@@ -81,12 +81,12 @@ class Front
     public function delete($id)
     {
         // retrieve task
-        $task = $this->syn->task->find($id);
+        $task = syn()->task->find($id);
 
         // delete it
-        $this->syn->task->delete($task);
+        syn()->task->delete($task);
 
-        $this->mog->home();
+        go('/');
     }
 
 }

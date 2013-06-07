@@ -74,6 +74,17 @@ function url($path)
 
 
 /**
+ * Redirect to url
+ * @param $url
+ */
+function go($url)
+{
+    header('Location: ' . url($url));
+    exit;
+}
+
+
+/**
  * Debug var
  */
 function debug()
@@ -86,7 +97,7 @@ function debug()
  * Session helper
  * @param null $name
  * @param null $value
- * @return mixed|\wicked\core\helper\Session
+ * @return mixed|\wicked\core\Session
  */
 function session($name = null, $value = null)
 {
@@ -94,14 +105,14 @@ function session($name = null, $value = null)
 
     // create session entity
     if(!$session)
-        $session = new wicked\core\helper\Session('wicked.session');
+        $session = new wicked\core\Session('wicked.session');
 
     // case 1 : get object
     if(!$name)
         return $session;
 
     // case 2 : get value
-    elseif($name and !$value)
+    elseif($name and is_null($value))
         return $session->get($name);
 
     // case 3 : set value
@@ -113,7 +124,7 @@ function session($name = null, $value = null)
  * Flash helper
  * @param $name
  * @param null $value
- * @return mixed|\wicked\core\helper\Session
+ * @return string|\wicked\core\Session
  */
 function flash($name, $value = null)
 {
@@ -121,10 +132,10 @@ function flash($name, $value = null)
 
     // create session entity
     if(!$session)
-        $session = new wicked\core\helper\Session('wicked.flash');
+        $session = new wicked\core\Session('wicked.flash');
 
     // case 1 : get flash
-    if(!$value) {
+    if(is_null($value)) {
         $message = $session->get($name);
         $session->clear($name);
         return $message;
@@ -139,24 +150,106 @@ function flash($name, $value = null)
  * User helper
  * @param $key
  * @param null $value
- * @return mixed|\wicked\core\helper\Session
+ * @return mixed|\wicked\core\Session
  */
-function user($key, $value = null)
+function user($key = null, $value = -1)
 {
     static $session;
 
     // create session entity
     if(!$session)
-        $session = new wicked\core\helper\Session('wicked.user');
+        $session = new wicked\core\Session('wicked.user');
 
     // case 1 : get entity
     if(!$key)
         return $session->get('entity');
 
-    // case 2 : get value
-    elseif($key and !$value)
+    // case 2 : set value
+    elseif($value == -1)
         return $session->get($key);
 
     // case 3 : set value
-    $session->set($key, $value);
+    else
+        $session->set($key, $value);
+}
+
+
+/**
+ * Log in and out
+ * @param $entity
+ * @param int $rank
+ */
+function auth($entity, $rank = 1)
+{
+
+    // login
+    if($entity) {
+        user('entity', $entity);
+        user('rank', $rank);
+    }
+    else {
+        user('entity', null);
+        user('rank', null);
+    }
+
+}
+
+
+/**
+ * Post helper
+ * @param null $key
+ * @return null
+ */
+function post($key = null)
+{
+    if(!$key)
+        return $_POST;
+
+    return isset($_POST[$key]) ? $_POST[$key] : null;
+}
+
+
+/**
+ * Throw error
+ * @param $message
+ * @param int $code
+ * @throws Exception
+ */
+function oops($message, $code = 0)
+{
+    throw new \Exception($message, $code);
+}
+
+
+/**
+ * Hydrate object with data
+ * @param $object
+ * @param array $data
+ * @param bool $force
+ */
+function hydrate(&$object, array $data, $force = false)
+{
+    foreach($data as $field => $value)
+        if($force or (!$force and property_exists($object, $field)))
+            $object->{$field} = $value;
+}
+
+
+/**
+ * Mog helper
+ * return \wicked\core\Mog
+ */
+function mog()
+{
+    return \maestro\Registrar::run('wicked.mog');
+}
+
+
+/**
+ * Syn helper
+ * @return \syn\core\ORM
+ */
+function syn()
+{
+    return \maestro\Registrar::run('wicked.syn');
 }
