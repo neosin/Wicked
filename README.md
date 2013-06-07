@@ -428,7 +428,7 @@ Voici la liste des événements :
 - `get.service`
 
 
-Les exceptions sont interprétées en tant que qu'évènement, ainsi vous pouvez générer vos propres exceptions :
+Les exceptions sont interprétées en tant que qu'évènements, ainsi vous pouvez générer vos propres exceptions :
 
 ```php
 opps('This is my awesome message !', 999);
