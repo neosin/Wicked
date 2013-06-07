@@ -584,7 +584,7 @@ $app->on(999, function($app, $message) { ... });
 
 ## Outils
 
-Wicked embarque un certains nombres d'outils utiles dans les cas d'applications les plus fréquents (**Attention, ces outils sont encore en version beta**) :
+Wicked embarque un certains nombres d'outils utiles dans les cas d'applications les plus fréquents **(attention, ces outils sont encore en version beta)** :
 
 **Lipsum** : Génère des faux textes, titres, paragraphes, lignes, emails en *Lorem Ipsum*
 
