@@ -358,7 +358,7 @@ class Front
 {
     public function index()
     {
-        $users = mog()->user->find(); // retourne tous les utilisateurs
+        $users = syn()->user->find(); // retourne tous les utilisateurs
     }
 }
 ```
