@@ -94,7 +94,7 @@ $username = post('username');   // récupère une champ du formulaire
 Rediriger :
 
 ```php
-go('user/list); // redirige vers http://your.app/user/list
+go('user/list');    // redirige vers http://your.app/user/list
 ```
 
 Accéder au Mog et à Syn :
