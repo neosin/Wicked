@@ -187,6 +187,7 @@ function auth($entity, $rank = 1)
         user('entity', $entity);
         user('rank', $rank);
     }
+    // logout
     else {
         user('entity', null);
         user('rank', null);

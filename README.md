@@ -26,7 +26,7 @@ L'objectif principal de **Wicked** est de garder une simplicité optimale dans l
 vous laissant ainsi plus de liberté dans la conception de vos classes.
 
 
-## Orgnisation du projet
+## Organisation du projet
 
 **Wicked** n'impose aucune organisation particulière mais se repose sur une norme par *convention*.
 Il est cependant conseillé d'utilise une organisation de projet MVP classique :
@@ -124,7 +124,7 @@ class Front
 
 ```php
 # views/front/index.php
-<?php if($message = flash('success'): ?>
+<?php if($message = flash('success')): ?>
 <div class="flash">
     <?= $message ?>
 </div>
@@ -178,17 +178,19 @@ class Front
 
 L'action, correctement effectuée, peut éventuellement renvoyer des données, il est temps de les affichers dans notre vue. Prenons l'exemple de l'action `Front::hello($name)` :
 
-```php
+```html
 # views/front/hello.php
 <h1>Hello <?= $name ?> !</h1>
 ```
+
+Le tableau `['name' => $name]` retourné par l'action définit les variables visibles par la vue, dans notre cas : `$name`.
 
 ### Layout
 
 Il arrive très frequemment que plusieurs vues utilisent un *layout* commun afin de ne pas dupliquer le code.
 Nous allons donc créer le fichier `views/layout.php` :
 
-```php
+```html
 <!doctype html>
 <html>
     <head>
@@ -203,7 +205,7 @@ Nous allons donc créer le fichier `views/layout.php` :
 
 Et définir dans la vue quel *layout* nous allons utiliser :
 
-```php
+```html
 <?php self::layout('views/layout.php'); ?>
 
 <h1>Hello <?= $name ?> !</h1>
