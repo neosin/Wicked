@@ -379,8 +379,8 @@ Dans le cas contraire, un événement `403` est déclenché *(par défaut, le ra
 Il est possible d'accéder à l'objet utilisateur de n'importe où grâce à la fonction suivante (principalement utile dans les vues) :
 
 ```php
-user();                 // accède à l'entité définit par login()
-$rank = user('rank');   // accède au rang)
+user();                 // accède à l'entité définit par auth()
+$rank = user('rank');   // accède au rang
 ```
 
 
