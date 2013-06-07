@@ -67,7 +67,7 @@ class App extends Kernel implements \ArrayAccess
                 $rank = Annotation::method($build[0], $build[1], 'rank');
 
                 // method defines rank, check security
-                if($rank != null and $rank > $app->mog->user->rank)
+                if($rank != null and $rank > user('rank'))
                     $allowed = false;
 
                 // method does not defines rank
@@ -77,7 +77,7 @@ class App extends Kernel implements \ArrayAccess
                     $rank = Annotation::object($build[0], 'rank');
 
                     // check
-                    if($rank and $rank > $app->mog->user->rank)
+                    if($rank and $rank > user('rank'))
                         $allowed = false;
 
                 }
@@ -133,7 +133,7 @@ class App extends Kernel implements \ArrayAccess
 
             // no listener for this event
             if(!$has)
-                $this->mog->oops($e->getMessage(), $e->getCode());
+                oops($e->getMessage(), $e->getCode());
         }
     }
 
