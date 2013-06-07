@@ -333,6 +333,36 @@ class Front
 }
 ```
 
+### Mog & Syn
+
+Pour vous permettre un accès simplifié au **Mog** et à **Syn** partout dans votre application, 2 fonctions sont disponibles :
+
+```php
+namespace app\controllers;
+
+class Front
+{
+    public function index()
+    {
+        $route = mog()->route; // récupère la route actuelle
+    }
+}
+```
+
+et
+
+```php
+namespace app\controllers;
+
+class Front
+{
+    public function index()
+    {
+        $users = mog()->user->find(); // retourne tous les utilisateurs
+    }
+}
+```
+
 
 ## Vue
 
