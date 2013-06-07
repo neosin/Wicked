@@ -40,6 +40,7 @@ class App extends Kernel implements \ArrayAccess
         parent::__construct($router);
 
         // auto register mog as dependency
+        $this['app'] = $this;
         $this['mog'] = $this->mog;
 
         // enhance system
@@ -135,6 +136,17 @@ class App extends Kernel implements \ArrayAccess
             if(!$has)
                 oops($e->getMessage(), $e->getCode());
         }
+    }
+
+
+    /**
+     * Reload app with new mog
+     * @param Mog $force
+     */
+    public function reload(Mog $force)
+    {
+        $this->_running = false;
+        $this->run($force);
     }
 
 

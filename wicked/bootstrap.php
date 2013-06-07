@@ -236,6 +236,29 @@ function hydrate(&$object, array $data, $force = false)
 
 
 /**
+ * Forward action without redirect
+ * todo
+ */
+function forward($action)
+{
+    // get app
+    $app = \maestro\Registrar::run('wicked.app');
+
+    // reverse routing
+    $route = $app->router->reverse($action);
+
+    // update mog
+    $mog = mog();
+    $mog->route = $route;
+
+    // reload app
+    $app->reload($mog);
+
+    exit;
+}
+
+
+/**
  * Mog helper
  * return \wicked\core\Mog
  */
