@@ -42,9 +42,9 @@ Il est cependant conseillé d'utilise une organisation de projet MVP classique :
 ```
 
 
-## Procéssus
+## Processus
 
-Le procéesus d'un framework MVP est relativement simple :
+Le procesus d'un framework MVP est relativement simple :
 
 ```
 Requête -> Action -> Vue
@@ -72,7 +72,6 @@ class Front
     public function hello($name)
     {
         // do some stuff
-
         return ['name' => $name];
     }
 
@@ -85,7 +84,7 @@ Dans notre contrôleur, nous avons 2 actions disponibles : `index` et `hello`, d
 
 **Wicked** utilise la libraire [Mog](https://github.com/WickedYeti/Mog) pour gérer la requête ainsi qu'un ensemble d'helpers :
 
-Accès à la session :
+### Accès à la session
 
 ```php
 namespace app\controllers;
@@ -104,7 +103,9 @@ class Front
 }
 ```
 
-Messages flash (attention, la récupération **consomme** le message, il ne sera plus disponible) :
+### Messages flash
+
+Attention, la récupération **consomme** le message, il ne sera plus disponible !
 
 ```php
 # controllers/Front.php
@@ -130,7 +131,7 @@ class Front
 <?php endif; ?>
 ```
 
-Données formulaires :
+### Données formulaire
 
 ```php
 namespace app\controllers;
@@ -156,7 +157,7 @@ class Front
 }
 ```
 
-Rediriger :
+### Redirection
 
 ```php
 namespace app\controllers;
