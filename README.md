@@ -584,47 +584,33 @@ $app->on(999, function($app, $message) { ... });
 
 ## Outils
 
-Wicked embarque un certains nombres d'outils utiles dans les cas d'applications les plus fréquents :
+Wicked embarque un certains nombres d'outils utiles dans les cas d'applications les plus fréquents (**Attention, ces outils sont encore en version beta**) :
 
-- Lipsum
-- Mail
-- FTP
-- URL
-- String
-- Date
-- Singleton
-- Annotation
-- ...
+**Lipsum** : Génère des faux textes, titres, paragraphes, lignes, emails en *Lorem Ipsum*
 
-Lipsum
-:   Génère des faux textes, titres, paragraphes, lignes, emails en *Lorem Ipsum*
+**Mail** : Classe d'envoi de mail simple et efficace
 
-Mail
-:   Classe d'envoi de mail simple et efficace
+**FTP** : Un connecteur FTP
 
-FTP
-:   Un connecteur FTP
+**Rest** : Une librairie d'appel Restfull
 
-URL
-:   Un parseur est buildeur d'URL
+**URL** : Un parseur est buildeur d'URL
 
-String
-:   Un ensemble de fonction de transformation de string
+**String** : Un ensemble de fonction de transformation de string
 
-Date
-:   Déclinaison française de la gestion de date
+**Date** : Déclinaison française de la gestion de date
 
-Singleton
-:   Un trait très utile...
+**Singleton** : Un trait très utile...
 
-Annotation
-:   Parser d'annotation pour classe, propriété ou méthode
+**Annotation** : Parser d'annotation pour classe, propriété ou méthode
 
-Et d'autre...
+**DataArray** : Transformer vos objets en array améliorés
 
-Parmis ces outils, l'outils CRUD, vous permettra d'automatiser les tâches chronophages de lecture, écrite, mise à jours et suppression d'une entité :
+**CRUD** : Automatisation d'action CRUD
 
-**Attention, cet outils est encore en version beta**
+### CRUD
+
+Parmis ces outils, l'outils CRUD, vous permettra d'automatiser les tâches chronophages de lecture, écriture, mise à jours et suppression d'une entité :
 
 ```php
 namespace app\controllers;
@@ -634,13 +620,11 @@ use wicked\tools\actions\CRUD;
 class Item
 {
 
-    use \wicked\tools\wire\All;
-
     public $crud;
 
     public function __construct()
     {
-        $this->crud = new CRUD('item', 'app\models\Item');
+        $this->crud = new CRUD('item', 'app\models\Item'); // définission du modèle à gérer
     }
 
 }
@@ -663,7 +647,7 @@ public function show($id)
 
 public function create()
 {
-    if(post()) {
+    if($post = post()) {
         $item = $this->crud->create($post);
         go('item/edit/' . $item->id);
     }
@@ -671,8 +655,6 @@ public function create()
 
 public function edit($id)
 {
-    $item = $this->crud->read($id);
-
     if(post())
         $item = $this->crud->update($id, $post);
 
@@ -686,6 +668,7 @@ public function delete($id)
 ```
 
 Toutes ces fonctions s'occupent notamment de vérifier si l'entité existe, si elle est valide
-et se charge de l'opération en base de donnée via **Syn**, elle renvoient false si l'opération à échouée.
+et se charge de l'opération en base de donnée via **Syn**, elle renvoient `false` si l'opération à échouée.
 
-## next : coming soon...
+
+## next : coming soon... mais on arrive bientôt au bout ;)
