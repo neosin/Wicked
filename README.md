@@ -8,7 +8,7 @@ Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essent
 Le fichier `bootstrap.php` permet d'inclure les librairies et mécanismes de **Wicked** dans votre projet et ainsi d'appeler les classes nécessaires à votre application :
 
 ```php
-require '../../wicked/bootstrap.php';
+require '../wicked/bootstrap.php';
 
 $app = new wicked\App();
 $app->run();
@@ -34,19 +34,10 @@ Il est cependant conseillé d'utilise une organisation de projet MVP classique :
 ```
 /app
     /controllers
-        Front.php
-    /libs
     /models
     /public
-        /css
-        /images
-        /js
     /views
-        /front
-            index.php
-        layout.php
     index.php
-    .htaccess
 /wicked
 ```
 
