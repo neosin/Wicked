@@ -1,6 +1,6 @@
 # WickedFramework
 
-Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
+Wicked est un petit framework en PHP5.4 artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
 1. [Quickstart](#quickstart)
     - [Organisation](#organisation)
