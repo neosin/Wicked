@@ -2,22 +2,27 @@
 
 Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
-1. Bootstrap
-3. Processus
-4. Action
+1. Quickstart
+    - Bootstrap
+    - Namespaces
+    - Organisation
+    - Processus
+3. Action
     - Requête
     - Session
     - Messages flash
     - Authentificiation
     - Formulaire
     - Redirection
-5. Vue
+4. Vue
     - Layout
     - Assets
-6. Router
+5. Router
 
 
-## Bootstrap
+## Quickstart
+
+### Bootstrap
 
 Le fichier `bootstrap.php` permet d'inclure les librairies et mécanismes de **Wicked** dans votre projet et ainsi d'appeler les classes nécessaires à votre application :
 
@@ -27,6 +32,8 @@ require '../wicked/bootstrap.php';
 $app = new wicked\App();
 $app->run();
 ```
+
+### Namespaces
 
 Toutes vos classes seront reconnues par **Wicked** grâce au *vendor* `app\` et par un système par *convention* :
 
@@ -41,9 +48,11 @@ Dans ce cas là, le fichier chargé sera : `foo/Bar.php`.
 L'objectif principal de **Wicked** est de garder une simplicité optimale dans le développement de votre application, ainsi aucun *contrôleur* ou *modèle* ne devra étendre de quoi que ce soit,
 vous laissant ainsi plus de liberté dans la conception de vos classes.
 
+### Organisation
+
 Il est conseillé d'utiliser une organisation de projet MVP classique :
 
-```batch
+```
 /app
     /controllers    // contrôleurs et services
     /public         // fichiers css, js et images
@@ -52,8 +61,7 @@ Il est conseillé d'utiliser une organisation de projet MVP classique :
 /wicked
 ```
 
-
-## Processus
+### Processus
 
 Le procesus d'un framework MVP est relativement simple :
 
