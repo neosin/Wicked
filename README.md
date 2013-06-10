@@ -6,15 +6,15 @@ Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essent
 2. Organisation
 3. Processus
 4. Action
-    4.1. Requête
-    4.2. Session
-    4.3. Messages flash
-    4.4. Authentificiation
-    4.5. Formulaire
-    4.6. Redirection
+    1. Requête
+    2. Session
+    3. Messages flash
+    4. Authentificiation
+    5. Formulaire
+    6. Redirection
 5. Vue
-    5.1. Layout
-    5.1. Assets
+    1. Layout
+    2. Assets
 6. Router
 
 
