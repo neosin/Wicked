@@ -2,6 +2,21 @@
 
 Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
+1. Bootstrap
+2. Organisation
+3. Processus
+4. Action
+    4.1. Requête
+    4.2. Session
+    4.3. Messages flash
+    4.4. Authentificiation
+    4.5. Formulaire
+    4.6. Redirection
+5. Vue
+    5.1. Layout
+    5.1. Assets
+6. Router
+
 
 ## Bootstrap
 
@@ -79,7 +94,7 @@ class Front
 
 Dans notre contrôleur, nous avons 2 actions disponibles : `index` et `hello`, dont la dernière renvoyant un tableau de données, qui sera passé à la vue dans la suite du processus.
 
-## Requête
+### Requête
 
 **Wicked** utilise la libraire [Mog](https://github.com/WickedYeti/Mog) pour gérer la requête ainsi qu'un ensemble d'helpers :
 
