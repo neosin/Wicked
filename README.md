@@ -153,6 +153,8 @@ class Front
 
 ### Accès à la session
 
+*NB : Toutes les données non-scalaires seront sérialisées.*
+
 ```php
 namespace app\controllers;
 
@@ -211,7 +213,7 @@ class Front
     {
         if(post()) {
             $query = post('query'); // récupère un champ
-            doSearch($query);
+            syn()->user->find(['username' => $query]);
         }
     }
 
@@ -227,7 +229,7 @@ class Front
 
 ### Authentification
 
-Un helper permet d'authentifier l'utilisateur courant et son rang de manière simple `auth()` :
+Deux helpers permettent d'authentifier et de récupérer l'utilisateur courant et son rang de manière simple : `auth()` et `user()`.
 
 ```php
 namespace app\controllers;
@@ -235,15 +237,17 @@ namespace app\controllers;
 class User
 {
 
-    public function login()
+    public function login($id)
     {
-        if(post()){
-            $user = syn()->user->find([
-                'username' => post('username'),
-                'password' => sha1(post('password'))
-            ]);
-            auth($user, 9);
-        }
+        $user = syn()->user->find($id);
+        auth($user, 9);
+    }
+
+    public function profile()
+    {
+        $user = user();
+        $rank = user('rank');
+        return ['user' => $rank, 'rank' => $rank]
     }
 
     public function logout()
@@ -252,13 +256,6 @@ class User
     }
 
 }
-```
-
-Une fois connecté, on peut accéder à l'utilisateur courant et son rang grâce à la fonction `user()` :
-
-```php
-$user = user();         // accède à l'entité définit par auth()
-$rank = user('rank');   // accède au rang
 ```
 
 Dans le cas où certaines actions sont strictement protégées pour un certain rang, la gestion se fait par annotation soit sur le contrôleur en entier :
@@ -299,6 +296,8 @@ Dans le cas contraire, un événement `403` est déclenché *(par défaut, le ra
 
 ### Redirection
 
+L'url est relative à l'application, pour une redirection vers l'extérieur voir `mog()->go('somwhere');`
+
 ```php
 namespace app\controllers;
 
@@ -307,7 +306,7 @@ class Front
 
     public function index()
     {
-        go('/not/available');
+        go('/not/available'); // http://your.app/not/available
     }
 
 }
@@ -316,7 +315,8 @@ class Front
 
 ## Créer votre vue
 
-L'action, correctement effectuée, peut éventuellement renvoyer des données, il est temps de les affichers dans notre vue. Prenons l'exemple de l'action `Front::hello($name)` :
+L'action, correctement effectuée, peut éventuellement renvoyer des données, il est temps de les affichers dans notre vue.
+Prenons l'exemple de l'action `app\controllers\Front::hello($name)` :
 
 ```html
 # views/front/hello.php
@@ -351,7 +351,7 @@ Et définir dans la vue quel *layout* nous allons utiliser :
 <h1>Hello <?= $name ?> !</h1>
 ```
 
-Grâce à ce mécanisme, le contenu de la vue sera afficher dans le layout à la place du self::content();
+Grâce à ce mécanisme, le contenu de la vue sera afficher dans le layout à la place du `self::content()`;
 
 ### Assets
 
@@ -401,10 +401,10 @@ http://your.app/             => app\controllers\Front::index
 La vue appelée se base sur le même chemin que le couple contrôleur/méthode :
 
 ```
-http://your.app/front/hello  => app/views/front/hello.php
+http://your.app/front/hello  => views/front/hello.php
 ```
 
-Tous les segments présent en plus deviennent des arguments qui seront passés à la méthode, ainsi pour `http://your.app/front/hello/yeti` :
+Tous les segments présent en plus deviennent des arguments de la méthode, ainsi pour `http://your.app/front/hello/yeti` :
 
 ```php
 namepsace app\controllers;
@@ -416,6 +416,14 @@ class Front
         return ['name' => $name];
     }
 }
+```
+
+Exemple :
+
+```
+url :       http://your.app/user/show/5
+action :    app\controllers\User::show(5);
+vue :       views/user/show.php
 ```
 
 
@@ -539,6 +547,12 @@ Url longue : `http://your.app/bundle/controller/method`
 $router = wicked\core\router\BundleRouter();
 ```
 
+Il suffit alors d'injecter le router dans l'application :
+
+```php
+$app = new wicked\App($router);
+```
+
 ### Vos règles
 
 Malgré la présence de ces 3 presets, il est possible d'éditer vos propres règles de routing de cette manières :
@@ -564,12 +578,6 @@ $router->set('user/(+id)/edit', 'app/controllers/User::edit');
 ```
 
 Dans ce cas, grâce au placeholder type `(+arg)`, l'argument est forcé et sera passé à l'action avant les autres arguments possibles.
-
-Il suffit alors d'injecter le router dans l'application :
-
-```php
-$app = new wicked\App($router);
-```
 
 Il est tout à fait possible de définir plusieurs règles, le routeur s'arretera sur la première qui match la requête.
 
@@ -656,13 +664,13 @@ Voici la liste des événements :
 Les exceptions sont interprétées en tant que qu'évènements, ainsi vous pouvez générer vos propres exceptions :
 
 ```php
-oops('This is my awesome message !', 999);
+oops('Yo Satan !', 666);
 ```
 
 Et récupérer avec :
 
 ```php
-$app->on(999, function($app, $message) { ... });
+$app->on(666, function($app, $message) { ... });
 ```
 
 
