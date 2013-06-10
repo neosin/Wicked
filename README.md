@@ -2,7 +2,7 @@
 
 Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
-1. Quickstart
+1. [Quickstart](#quickstart)
     - Bootstrap
     - Namespaces
     - Organisation
