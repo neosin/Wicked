@@ -375,19 +375,19 @@ Vous pouvez désormais consulter la rubrique de fonctionnement avancé, il vous 
 
 # Fonctionnement avancé
 
-1. Action
-    - Interception de vue
-    - Auto-wire
-    - Mog et Syn
-2. Vue
-    - Slot & Hook
-3. Router
-    - Presets
-    - From scratch
-    - Combinaison
-    - Route actuelle
-4. Evénements
-5. Outils
+1. [Action](#action)
+    - [Interception de vue](#interception-de-vue)
+    - [Auto-wire](#auto-wire)
+    - [Mog et Syn](#mog--syn)
+2. [Vue](#vue)
+    - [Slot & Hook](#slot--hook)
+3. [Router](#router)
+    - [Presets](#plop)
+    - [Règles](#vos-rgles)
+    - [Combinaison](#combinaison)
+    - [Route actuelle](#la-route-actuelle)
+4. [Evénements](#les-vnements)
+5. [Outils](#outils)
 
 ## Action
 
