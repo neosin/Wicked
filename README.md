@@ -163,19 +163,19 @@ class User
 
     public function login()
     {
-        $user = getUser();
-        auth($user, 9);
+        $user = getUserByAnyWay();
+        auth($user, 9); // login (user + rank)
     }
 
     public function logout()
     {
-        auth(false);
+        auth(false);    // logout
     }
 
 }
 ```
 
-Une fois connecté, on peut accéder à l'utilisateur courant et son range grâce à la fonction `user()` :
+Une fois connecté, on peut accéder à l'utilisateur courant et son rang grâce à la fonction `user()` :
 
 ```php
 $user = user();         // accède à l'entité définit par auth()
