@@ -17,7 +17,7 @@ Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essent
 4. [Vue](#crer-votre-vue)
     - [Layout](#layout)
     - [Assets](#assets)
-5. [Router](#router)
+5. [Router](#rgles-du-routeur)
 
 
 ## Quickstart
