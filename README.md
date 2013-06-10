@@ -9,10 +9,11 @@ Wicked est un petit framework en PHP5.4 artisanal, rapide et sympa ne gardant qu
     - [Processus](#processus)
 2. [Action](#dfinir-vos-actions)
     - [Requête](#requte)
+    - [Mog & Syn](#mog--syn)
     - [Session](#session)
     - [Messages flash](#messages-flash)
-    - [Authentification](#authentification)
     - [Formulaire](#donnes-formulaire)
+    - [Authentification](#authentification)
     - [Redirection](#redirection)
 3. [Vue](#crer-votre-vue)
     - [Layout](#layout)
@@ -118,6 +119,38 @@ Dans notre contrôleur, nous avons 2 actions disponibles : `index` et `hello`, d
 
 **Wicked** utilise la libraire [Mog](https://github.com/WickedYeti/Mog) pour gérer la requête ainsi qu'un ensemble d'helpers :
 
+### Mog & Syn
+
+**Syn** est un micro-ORM, composant indispensable de **Wicked**.
+Pour vous permettre un accès simplifié partout dans votre application, 2 fonctions sont disponibles :
+
+```php
+namespace app\controllers;
+
+class Front
+{
+    public function index()
+    {
+        $route = mog()->route; // récupère la route actuelle
+    }
+}
+```
+
+et
+
+```php
+namespace app\controllers;
+
+class Front
+{
+    public function index()
+    {
+        $users = syn()->user->find(); // retourne tous les utilisateurs
+    }
+}
+```
+
+
 ### Accès à la session
 
 ```php
@@ -166,6 +199,32 @@ class Front
 ```
 
 
+### Données formulaire
+
+```php
+namespace app\controllers;
+
+class Front
+{
+
+    public function search()
+    {
+        if(post()) {
+            $query = post('query'); // récupère un champ
+            doSearch($query);
+        }
+    }
+
+    public function edit($id)
+    {
+        $user = syn()->user->find($id);
+        hydrate($user, post()); // hydrate l'objet avec les données POST
+        syn()->user->save($user);
+    }
+
+}
+```
+
 ### Authentification
 
 Un helper permet d'authentifier l'utilisateur courant et son rang de manière simple `auth()` :
@@ -178,13 +237,18 @@ class User
 
     public function login()
     {
-        $user = getUserByAnyWay();
-        auth($user, 9); // login (user + rank)
+        if(post()){
+            $user = syn()->user->find([
+                'username' => post('username'),
+                'password' => sha1(post('password'))
+            ]);
+            auth($user, 9);
+        }
     }
 
     public function logout()
     {
-        auth(false);    // logout
+        auth(false);
     }
 
 }
@@ -232,32 +296,6 @@ class Front
 
 Cette annotation sera comparée à `user('rank');` afin de déterminer si l'utilisateur a le droit ou non d'accéder à cette action (supérieur ou égal).
 Dans le cas contraire, un événement `403` est déclenché *(par défaut, le rang défini par la méthode sera prioritaire sur le contrôleur)*.
-
-### Données formulaire
-
-```php
-namespace app\controllers;
-
-class Front
-{
-
-    public function search()
-    {
-        if(post()) {
-            $query = post('query'); // récupère un champ
-            doSearch($query);
-        }
-    }
-
-    public function edit($id)
-    {
-        $user = getUser($id);
-        hydrate($user, post()); // hydrate l'objet avec les données POST
-        doSave($user);
-    }
-
-}
-```
 
 ### Redirection
 
@@ -393,7 +431,6 @@ Vous pouvez désormais consulter la rubrique de fonctionnement avancé, il vous 
 1. [Action](#action)
     - [Interception de vue](#interception-de-vue)
     - [Auto-wire](#auto-wire)
-    - [Mog et Syn](#mog--syn)
 2. [Vue](#vue)
     - [Slot & Hook](#slot--hook)
 3. [Router](#router)
@@ -448,37 +485,6 @@ class Front
     public $bear;
 }
 ```
-
-### Mog & Syn
-
-Pour vous permettre un accès simplifié au **Mog** et à **Syn** partout dans votre application, 2 fonctions sont disponibles :
-
-```php
-namespace app\controllers;
-
-class Front
-{
-    public function index()
-    {
-        $route = mog()->route; // récupère la route actuelle
-    }
-}
-```
-
-et
-
-```php
-namespace app\controllers;
-
-class Front
-{
-    public function index()
-    {
-        $users = syn()->user->find(); // retourne tous les utilisateurs
-    }
-}
-```
-
 
 ## Vue
 
