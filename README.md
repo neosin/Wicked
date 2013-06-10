@@ -3,9 +3,9 @@
 Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
 1. [Quickstart](#quickstart)
+    - [Organisation](#organisation)
     - [Bootstrap](#boostrap)
     - [Namespaces](#namespaces)
-    - [Organisation](#organisation)
     - [Processus](#processus)
 2. [Action](#dfinir-vos-actions)
     - [Requête](#requte)
@@ -23,15 +23,42 @@ Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essent
 
 ## Quickstart
 
+### Organisation
+
+Il est conseillé d'utiliser une organisation de projet MVP classique, cependant rien n'est imposé et vous pouvez suivre votre propre organisation.
+
+```
+/app
+    /controllers    // contrôleurs et services
+    /public         // fichiers css, js et images
+    /views          // vues et layouts
+    index.php       // point d'entrée de l'application
+/wicked
+```
+
 ### Bootstrap
 
 Le fichier `bootstrap.php` permet d'inclure les librairies et mécanismes de **Wicked** dans votre projet et ainsi d'appeler les classes nécessaires à votre application :
 
 ```php
+# index.php
 require '../wicked/bootstrap.php';
 
 $app = new wicked\App();
 $app->run();
+```
+
+Le framework utilise un système d'url *friendly* et nécessite un fichier `.htaccess` à la racine de votre application pour rediriger toutes les requêtes vers votre fichier `index.php` :
+
+```
+SetEnv PHP_VER 5_4
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !favicon.ico$
+    RewriteRule ^(.*)$ index.php?$1 [QSA,L]
+</IfModule>
 ```
 
 ### Namespaces
@@ -48,19 +75,6 @@ Dans ce cas là, le fichier chargé sera : `foo/Bar.php`.
 
 L'objectif principal de **Wicked** est de garder une simplicité optimale dans le développement de votre application, ainsi aucun *contrôleur* ou *modèle* ne devra étendre de quoi que ce soit,
 vous laissant ainsi plus de liberté dans la conception de vos classes.
-
-### Organisation
-
-Il est conseillé d'utiliser une organisation de projet MVP classique :
-
-```
-/app
-    /controllers    // contrôleurs et services
-    /public         // fichiers css, js et images
-    /views          // vues et layouts
-    index.php       // point d'entrée de l'application
-/wicked
-```
 
 ### Processus
 
