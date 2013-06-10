@@ -592,7 +592,7 @@ $mog->route->data;      // les placeholders de l'url
 ## Les événements
 
 L'application déclenche des événements lors des étapes clés du processus.
-En exemple, l'exception `404` soulevée par **Wicked** est redirigée sur le flux des évévenements afin que l'utilisateur puisse agir en conséquence :
+En exemple, l'exception `404` soulevée par **Wicked** est redirigée sur le flux des événements afin que l'utilisateur puisse agir en conséquence :
 
 ```php
 $app = new wicked\App();
