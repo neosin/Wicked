@@ -328,7 +328,7 @@ Exemple :
 ```
 
 
-## Routeur
+## Règles du routeur
 
 Nos actions et nos vues sont prêtes ! Il est temps de comprendre comment le router va définir l'action à executer en fonction de la requête.
 Par défaut, le router va appliquer la règle empirique :
