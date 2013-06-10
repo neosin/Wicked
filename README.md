@@ -27,7 +27,7 @@ Wicked est un petit framework en PHP5.4 artisanal, rapide et sympa ne gardant qu
 
 Il est conseillé d'utiliser une organisation de projet MVP classique, cependant rien n'est imposé et vous pouvez suivre votre propre organisation.
 
-```
+```php
 /app
     /controllers    // contrôleurs et services
     /public         // fichiers css, js et images
