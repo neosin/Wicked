@@ -43,7 +43,7 @@ vous laissant ainsi plus de liberté dans la conception de vos classes.
 
 Il est conseillé d'utiliser une organisation de projet MVP classique :
 
-```php
+```batch
 /app
     /controllers    // contrôleurs et services
     /public         // fichiers css, js et images
