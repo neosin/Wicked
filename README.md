@@ -29,7 +29,7 @@ $app = new wicked\App();
 $app->run();
 ```
 
-Toutes vos classes seront reconnues par **Wicked** grâce au *vendor* `app\` :
+Toutes vos classes seront reconnues par **Wicked** grâce au *vendor* `app\` et par un système par *convention* :
 
 ```php
 namespace app\foo;
@@ -37,21 +37,19 @@ namespace app\foo;
 class Bar {}
 ```
 
+Dans ce cas là, le fichier chargé sera : `foo/Bar.php`.
+
 L'objectif principal de **Wicked** est de garder une simplicité optimale dans le développement de votre application, ainsi aucun *contrôleur* ou *modèle* ne devra étendre de quoi que ce soit,
 vous laissant ainsi plus de liberté dans la conception de vos classes.
 
+Il est conseillé d'utiliser une organisation de projet MVP classique :
 
-## Organisation du projet
-
-**Wicked** n'impose aucune organisation particulière mais se repose sur une norme par *convention*.
-Il est cependant conseillé d'utilise une organisation de projet MVP classique :
-
-```
+```php
 /app
-    /controllers
-    /public
-    /views
-    index.php
+    /controllers    // contrôleurs et services
+    /public         // fichiers css, js et images
+    /views          // vues et layouts
+    index.php       // point d'entrée de l'application
 /wicked
 ```
 
