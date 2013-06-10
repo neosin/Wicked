@@ -45,11 +45,11 @@ trait Model
             if($rel->type == 'many') {
                 return syn()->{$entity}->find([$rel->link => $this->id]);
             }
+            // one
             elseif($rel->type == 'one') {
                 return syn()->{$entity}->find($rel->link);
             }
-            else
-                throw new \InvalidArgumentException('Unknown relation type "' . $rel->type . '" in ' . get_called_class());
+
         }
         else
             throw new \InvalidArgumentException('Method ' . $entity . ' does not exists in ' . get_called_class());
