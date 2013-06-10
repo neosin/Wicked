@@ -3,7 +3,6 @@
 Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
 1. Bootstrap
-2. Organisation
 3. Processus
 4. Action
     - Requête
