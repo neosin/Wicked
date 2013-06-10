@@ -22,13 +22,13 @@ trait Model
         if(!$this->__rel) {
 
             // get annotations
-            $annotations = Annotation::object($this, 'has');
+            $annotations = Annotation::object($this);
 
             // parse
-            if($annotations) {
-                foreach($annotations as $annotation) {
+            foreach($annotations as $key => $annotation) {
+                if($key == 'has') {
                     @list($type, $name, $link) = explode(' ', $annotation);
-                    $link = trim($link, '()') ?: strtolower($name);
+                    $link = $link ? trim($link, '()') : strtolower($name);
                     $this->__rel[strtolower($name)] = (object)['type' => $type, 'link' => $link];
                 }
             }

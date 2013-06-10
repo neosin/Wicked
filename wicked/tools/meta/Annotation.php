@@ -73,7 +73,7 @@ abstract class Annotation
      * @param $annotation
      * @return array|null
      */
-    public static function get($ref, $annotation)
+    public static function get($ref, $annotation = null)
     {
         // cannot read phpdoc
         if(!method_exists($ref, 'getDocComment'))
