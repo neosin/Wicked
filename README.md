@@ -2,8 +2,6 @@
 
 Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
-**Quickstart**
-
 1. Bootstrap
 2. Organisation
 3. Processus
@@ -18,22 +16,6 @@ Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essent
     1. Layout
     2. Assets
 6. Router
-
-**Fonctionnement avancé**
-
-1. Action
-    1. Interception de vue
-    2. Auto-wire
-    3. Mog et Syn
-2. Vue
-    1. Slot & Hook
-3. Router
-    1. Presets
-    2. From scratch
-    3. Combinaison
-    4. Route actuelle
-4. Evénements
-5. Outils
 
 
 ## Bootstrap
@@ -387,6 +369,20 @@ Vous pouvez désormais consulter la rubrique de fonctionnement avancé, il vous 
 
 
 # Fonctionnement avancé
+
+1. Action
+    1. Interception de vue
+    2. Auto-wire
+    3. Mog et Syn
+2. Vue
+    1. Slot & Hook
+3. Router
+    1. Presets
+    2. From scratch
+    3. Combinaison
+    4. Route actuelle
+4. Evénements
+5. Outils
 
 ## Action
 
