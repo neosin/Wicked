@@ -7,17 +7,18 @@ Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essent
     - [Namespaces](#namespaces)
     - [Organisation](#organisation)
     - [Processus](#processus)
-3. [Action](#dfinir-vos-actions)
+2. [Action](#dfinir-vos-actions)
     - [Requête](#requte)
     - [Session](#session)
     - [Messages flash](#messages-flash)
     - [Authentification](#authentification)
     - [Formulaire](#donnes-formulaire)
     - [Redirection](#redirection)
-4. [Vue](#crer-votre-vue)
+3. [Vue](#crer-votre-vue)
     - [Layout](#layout)
     - [Assets](#assets)
-5. [Router](#rgles-du-routeur)
+4. [Router](#rgles-du-routeur)
+5. [Fonctionnement avancé](#fonctionnement-avanc)
 
 
 ## Quickstart
