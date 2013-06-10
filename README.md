@@ -133,7 +133,7 @@ class Front
 
 ### Authentification
 
-Un helper permet d'authentifier l'utilisateur courant et son rang de manière simple :
+Un helper permet d'authentifier l'utilisateur courant et son rang de manière simple `auth()` :
 
 ```php
 namespace app\controllers;
