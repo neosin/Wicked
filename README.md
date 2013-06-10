@@ -20,7 +20,7 @@ Wicked est un petit framework artisanal, rapide et sympa ne gardant que l'essent
 5. Router
 
 
-## Quickstart{#quickstart}
+## Quickstart
 
 ### Bootstrap
 
