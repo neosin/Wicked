@@ -34,7 +34,6 @@ Il est cependant conseillé d'utilise une organisation de projet MVP classique :
 ```
 /app
     /controllers
-    /models
     /public
     /views
     index.php
@@ -130,6 +129,74 @@ class Front
 </div>
 <?php endif; ?>
 ```
+
+
+### Authentification
+
+Un helper permet d'authentifier l'utilisateur courant et son rang de manière simple :
+
+```php
+namespace app\controllers;
+
+class User
+{
+
+    public function login()
+    {
+        $user = getUser();
+        auth($user, 9);
+    }
+
+    public function logout()
+    {
+        auth(false);
+    }
+
+}
+```
+
+Une fois connecté, on peut accéder à l'utilisateur courant et son range grâce à la fonction `user()` :
+
+```php
+$user = user();         // accède à l'entité définit par auth()
+$rank = user('rank');   // accède au rang
+```
+
+Dans le cas où certaines actions sont strictement protégées pour un certain rang, la gestion se fait par annotation soit sur le contrôleur en entier :
+
+```php
+namespace app\controllers;
+
+/**
+ * @rank 8
+ */
+class Front
+{
+    ...
+}
+```
+
+Soit directement sur la méthode :
+
+```php
+namespace app\controllers;
+
+class Front
+{
+
+    /**
+     * @rank 4
+     */
+    public function index()
+    {
+        ...
+    }
+
+}
+```
+
+Cette annotation sera comparée à `user('rank');` afin de déterminer si l'utilisateur a le droit ou non d'accéder à cette action (supérieur ou égal).
+Dans le cas contraire, un événement `403` est déclenché *(par défaut, le rang défini par la méthode sera prioritaire sur le contrôleur)*.
 
 ### Données formulaire
 
@@ -487,74 +554,6 @@ $mog->route->data;      // les placeholders de l'url
 ```
 
 
-## Authentification
-
-Un helper permet d'authentifier l'utilisateur courant et son rang de manière simple :
-
-```php
-namespace app\controllers;
-
-class User
-{
-
-    public function login()
-    {
-        $user = getUser();
-        auth($user, 9);
-    }
-
-    public function logout()
-    {
-        auth(false);
-    }
-
-}
-```
-
-Une fois connecté, on peut accéder à l'utilisateur courant et son range grâce à la fonction `user()` :
-
-```php
-$user = user();         // accède à l'entité définit par auth()
-$rank = user('rank');   // accède au rang
-```
-
-Dans le cas où certaines actions sont strictement protégées pour un certain rang, la gestion se fait par annotation soit sur le contrôleur en entier :
-
-```php
-namespace app\controllers;
-
-/**
- * @rank 8
- */
-class Front
-{
-    ...
-}
-```
-
-Soit directement sur la méthode :
-
-```php
-namespace app\controllers;
-
-class Front
-{
-
-    /**
-     * @rank 4
-     */
-    public function index()
-    {
-        ...
-    }
-
-}
-```
-
-Cette annotation sera comparée à `user('rank');` afin de déterminer si l'utilisateur a le droit ou non d'accéder à cette action (supérieur ou égal).
-Dans le cas contraire, un événement `403` est déclenché *(par défaut, le rang défini par la méthode sera prioritaire sur le contrôleur)*.
-
-
 ## Les événements
 
 L'application déclenche des événements lors des étapes clés du processus.
@@ -638,67 +637,5 @@ Wicked embarque un certains nombres d'outils utiles dans les cas d'applications 
 
 **CRUD** : Automatisation d'action CRUD
 
-### CRUD
 
-Parmis ces outils, l'outils CRUD, vous permettra d'automatiser les tâches chronophages de lecture, écriture, mise à jours et suppression d'une entité :
-
-```php
-namespace app\controllers;
-
-use wicked\tools\actions\CRUD;
-
-class Item
-{
-
-    public $crud;
-
-    public function __construct()
-    {
-        $this->crud = new CRUD('item', 'app\models\Item'); // définission du modèle à gérer
-    }
-
-}
-```
-
-Une fois l'outils chargé, il vous propose 5 fonctions à placer dans vos méthodes :
-
-```php
-public function index()
-{
-    $items = $this->crud->read();
-    return ['items' => $items];
-}
-
-public function show($id)
-{
-    $item = $this->crud->read($id);
-    return ['item' => $item];
-}
-
-public function create()
-{
-    if($post = post()) {
-        $item = $this->crud->create($post);
-        go('item/edit/' . $item->id);
-    }
-}
-
-public function edit($id)
-{
-    if(post())
-        $item = $this->crud->update($id, $post);
-
-    return ['item' => $item];
-}
-
-public function delete($id)
-{
-    $this->crud->delete($id);
-}
-```
-
-Toutes ces fonctions s'occupent notamment de vérifier si l'entité existe, si elle est valide
-et se charge de l'opération en base de donnée via **Syn**, elle renvoient `false` si l'opération à échouée.
-
-
-## next : coming soon... mais on arrive bientôt au bout ;)
+## Next : coming soon...
