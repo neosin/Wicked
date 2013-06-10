@@ -122,7 +122,7 @@ Dans notre contrôleur, nous avons 2 actions disponibles : `index` et `hello`, d
 ### Mog & Syn
 
 **Syn** est un micro-ORM, composant indispensable de **Wicked**.
-Pour vous permettre un accès simplifié partout dans votre application, 2 fonctions sont disponibles :
+Pour vous permettre un accès simplifié partout dans votre application, 2 fonctions sont disponibles `mog()` et `syn()`  :
 
 ```php
 namespace app\controllers;
