@@ -244,7 +244,7 @@ Nos actions, correctement préparées, peuvent éventuellement renvoyer des donn
 
 Tout d'abords, le layout, cadre commun à toutes les vues :
 
-```html
+```php
 # views/layout.php
 <!doctype>
 <html>
@@ -265,7 +265,7 @@ La vue sera automatique chargée dans `self::content()`.
 
 Chaque vue doit définir le layout qu'elle veut utiliser, dans notre cas, nous n'avons qu'un seul layout.
 
-```html
+```php
 # views/user/login.php
 <?php self::layout('views/layout.php'); ?>  <!-- define the layout -->
 
@@ -278,7 +278,7 @@ Chaque vue doit définir le layout qu'elle veut utiliser, dans notre cas, nous n
 </form>
 ```
 
-```html
+```php
 # views/note/index.php
 <?php self::layout('views/layout.php'); ?>  <!-- define the layout -->
 
@@ -291,7 +291,7 @@ Chaque vue doit définir le layout qu'elle veut utiliser, dans notre cas, nous n
 <a href="<?= url('/note/add') ?>">New note</a>
 ```
 
-```html
+```php
 # views/note/add.php
 <?php self::layout('views/layout.php'); ?>  <!-- define the layout -->
 
@@ -308,7 +308,7 @@ Note : `ùrl()` permet de générer une url complète à partir de la base de vo
 Il arrive très frequemment que plusieurs vues utilisent un *layout* commun afin de ne pas dupliquer le code.
 Nous allons donc créer le fichier `views/layout.php` :
 
-```html
+```php
 <!doctype html>
 <html>
     <head>
@@ -323,7 +323,7 @@ Nous allons donc créer le fichier `views/layout.php` :
 
 Et définir dans la vue quel *layout* nous allons utiliser :
 
-```html
+```php
 <?php self::layout('views/layout.php'); ?>
 
 <h1>Hello <?= $name ?> !</h1>
