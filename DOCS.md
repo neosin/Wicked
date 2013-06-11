@@ -15,11 +15,19 @@ Wicked est un petit framework en PHP5.4 artisanal, rapide et sympa ne gardant qu
     - [Formulaire](#donnes-formulaire)
     - [Authentification](#authentification)
     - [Redirection](#redirection)
+    - [Interception de vue](#interception-de-vue)
+    - [Auto-wire](#auto-wire)
 3. [Vue](#crer-votre-vue)
     - [Layout](#layout)
     - [Assets](#assets)
+    - [Slot & Hook](#slot--hook)
 4. [Router](#rgles-du-routeur)
-5. [Fonctionnement avancé](#fonctionnement-avanc)
+    - [Presets](#plop)
+    - [Règles](#vos-rgles)
+    - [Combinaison](#combinaison)
+    - [Route actuelle](#la-route-actuelle)
+4. [Evénements](#les-vnements)
+5. [Outils](#outils)
 
 
 ## Quickstart
@@ -312,6 +320,49 @@ class Front
 }
 ```
 
+### Interception de vue
+
+Il est possible de changer de vue à la volée dans les contrôleurs grâce à l'annotation `@view` :
+
+```php
+namespace app\controllers;
+
+class Front
+{
+
+    /**
+     * @view path/to/another/view.php
+     */
+    public function hello()
+    {
+        return ['name' => 'world'];
+    }
+}
+```
+
+### Auto-wire
+
+Similaire aux EJB de Java, l'auto-wiring permet de lier automatiquement un objet à un attribut d'une classe grâce à la PHPDoc de ce dernier.
+Vous pouvez définir vos propres objets pouvant être accédé par l'auto-wire dans votre `index.php` grâce à ce mécanisme :
+
+```php
+$app['bear'] = new Bear('graoow');
+```
+
+Par ce mécanisme, **Wicked** donnera automatiquement son **Bear** au contrôleur afin que l'utilisateur puisse accéder aux fonctionnalités de ce dernier.
+
+```php
+namespace app\controllers;
+
+class Front
+{
+    /**
+     * @wire wicked.bear
+     */
+    public $bear;
+}
+```
+
 
 ## Créer votre vue
 
@@ -380,6 +431,32 @@ Exemple :
 </html>
 ```
 
+### Slot / Hook
+
+Le *layout* a pour vocation d'être fixe et invariant, cependant certaines informations nécessite d'être dynamique (le nom de l'utilisateur en cours par exemple)
+et peuvent être changées suivant l'action. Afin de déterminer ces zones, le *layout* à besoin de connaitre l'emplacement :
+
+```php
+<!doctype html>
+<html>
+    <head>
+        <title>My first WickedApp !</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <header><?= self::hook('username'); ?></header>
+        <?= self::content(); ?>
+    </body>
+</html>
+```
+
+Ainsi que la vue doit envoyer le contenu dynamique :
+
+```php
+self::layout('views/layout.php');
+self::slot('username', 'WickedYeti');
+```
+
 
 ## Règles du routeur
 
@@ -425,105 +502,6 @@ url :       http://your.app/user/show/5
 action :    app\controllers\User::show(5);
 vue :       views/user/show.php
 ```
-
-
-## Plop !
-
-C'est fini ! Votre application est en état de marche ;)
-Vous pouvez désormais consulter la rubrique de fonctionnement avancé, il vous reste encore plein de fonctionnalités à découvrir !
-
-
-
-# Fonctionnement avancé
-
-1. [Action](#action)
-    - [Interception de vue](#interception-de-vue)
-    - [Auto-wire](#auto-wire)
-2. [Vue](#vue)
-    - [Slot & Hook](#slot--hook)
-3. [Router](#router)
-    - [Presets](#plop)
-    - [Règles](#vos-rgles)
-    - [Combinaison](#combinaison)
-    - [Route actuelle](#la-route-actuelle)
-4. [Evénements](#les-vnements)
-5. [Outils](#outils)
-
-## Action
-
-### Interception de vue
-
-Il est possible de changer de vue à la volée dans les contrôleurs grâce à l'annotation `@view` :
-
-```php
-namespace app\controllers;
-
-class Front
-{
-
-    /**
-     * @view path/to/another/view.php
-     */
-    public function hello()
-    {
-        return ['name' => 'world'];
-    }
-}
-```
-
-### Auto-wire
-
-Similaire aux EJB de Java, l'auto-wiring permet de lier automatiquement un objet à un attribut d'une classe grâce à la PHPDoc de ce dernier.
-Vous pouvez définir vos propres objets pouvant être accédé par l'auto-wire dans votre `index.php` grâce à ce mécanisme :
-
-```php
-$app['bear'] = new Bear('graoow');
-```
-
-Par ce mécanisme, **Wicked** donnera automatiquement son **Bear** au contrôleur afin que l'utilisateur puisse accéder aux fonctionnalités de ce dernier.
-
-```php
-namespace app\controllers;
-
-class Front
-{
-    /**
-     * @wire wicked.bear
-     */
-    public $bear;
-}
-```
-
-## Vue
-
-### Slot / Hook
-
-Le *layout* a pour vocation d'être fixe et invariant, cependant certaines informations nécessite d'être dynamique (le nom de l'utilisateur en cours par exemple)
-et peuvent être changées suivant l'action. Afin de déterminer ces zones, le *layout* à besoin de connaitre l'emplacement :
-
-```php
-<!doctype html>
-<html>
-    <head>
-        <title>My first WickedApp !</title>
-        <meta charset="utf-8">
-    </head>
-    <body>
-        <header><?= self::hook('username'); ?></header>
-        <?= self::content(); ?>
-    </body>
-</html>
-```
-
-Ainsi que la vue doit envoyer le contenu dynamique :
-
-```php
-self::layout('views/layout.php');
-self::slot('username', 'WickedYeti');
-```
-
-
-## Router
 
 ### Les presets
 
@@ -603,7 +581,6 @@ $app = new wicked\App($router);
 ```
 
 Ainsi, toutes les url commencant par `/admin` pointeront sur le bundle `app\bundles\back`, les autres sur le bundle `app\bundles\front`.
-
 
 ### La route actuelle
 
@@ -702,3 +679,5 @@ Wicked embarque un certains nombres d'outils utiles dans les cas d'applications 
 
 
 ## Next : almost finished...
+
+
