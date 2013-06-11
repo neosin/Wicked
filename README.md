@@ -60,18 +60,6 @@ SetEnv PHP_VER 5_4
 </IfModule>
 ```
 
-### Namespaces
-
-Toutes vos classes seront reconnues par **Wicked** grâce au *vendor* `app\` et par un système par *convention* :
-
-```php
-namespace app\foo;
-
-class Bar {}
-```
-
-Dans ce cas là, le fichier chargé sera : `foo/Bar.php`.
-
 ## Les modèles
 
 Dans notre application, nous allons gérer 2 types d'entités : `User` et `Note`, chaque `Note` ayant un `User`.
