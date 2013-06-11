@@ -301,35 +301,8 @@ Chaque vue doit définir le layout qu'elle veut utiliser, dans notre cas, nous n
 </form>
 ```
 
-Note : `ùrl()` permet de générer une url complète à partir de la base de votre application : `url('some/where');` devient `http://your.app/some/where`.
+Note : `url()` permet de générer une url complète à partir de la base de votre application : `url('some/where');` devient `http://your.app/some/where`.
 
-### Layout
-
-Il arrive très frequemment que plusieurs vues utilisent un *layout* commun afin de ne pas dupliquer le code.
-Nous allons donc créer le fichier `views/layout.php` :
-
-```php
-<!doctype html>
-<html>
-    <head>
-        <title>My first WickedApp !</title>
-        <meta charset="utf-8">
-    </head>
-    <body>
-        <?= self::content(); ?>
-    </body>
-</html>
-```
-
-Et définir dans la vue quel *layout* nous allons utiliser :
-
-```php
-<?php self::layout('views/layout.php'); ?>
-
-<h1>Hello <?= $name ?> !</h1>
-```
-
-Grâce à ce mécanisme, le contenu de la vue sera afficher dans le layout à la place du `self::content()`;
 
 ## Routeur
 
