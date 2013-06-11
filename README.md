@@ -2,6 +2,8 @@
 
 Wicked est un petit framework en PHP5.4 artisanal, rapide et sympa ne gardant que l'essentiel pour les projets modestes :)
 
+[Voir la documentation complète.](https://github.com/WickedYeti/Wicked/blob/master/DOCS.md)
+
 ## Quickstart : TODO List
 
 Nous allons prendre l'exemple d'une **TODO list** avec gestion des utilisateurs, un cas simple mais qui permettra de couvrir l'utilisation de **Wicked**.
