@@ -228,7 +228,7 @@ class Note
      */
     public function delete($id)
     {
-        $note = syn()->note->find($id); // retrive note
+        $note = syn()->note->find($id); // retrieve note
         syn()->note->delete($note);     // delete it
         go('/');                        // redirect to index
     }
@@ -268,6 +268,8 @@ Chaque vue doit définir le layout qu'elle veut utiliser, dans notre cas, nous n
 ```html
 # views/user/login.php
 <?php self::layout('views/layout.php'); ?>  <!-- define the layout -->
+
+<?= flash('error'); ?>
 
 <form method="post">
     <input type="text" name="username" placeholder="Username" />
