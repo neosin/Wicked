@@ -43,6 +43,10 @@ define('APP_URL', dirname($_SERVER['SCRIPT_NAME']) . '/');
 /*
  * Init session
  */
+ini_set('session.use_trans_sid', 0);
+ini_set('session.use_only_cookies', 1);
+ini_set("session.cookie_lifetime", 604800);
+ini_set("session.gc_maxlifetime", 604800);
 session_set_cookie_params(604800);
 session_start();
 
