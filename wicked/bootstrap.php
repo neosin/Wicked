@@ -169,7 +169,7 @@ function user($key = null, $value = -1)
         return $session->get('entity');
 
     // case 2 : set value
-    elseif($value == -1)
+    elseif($value === -1)
         return $session->get($key);
 
     // case 3 : set value

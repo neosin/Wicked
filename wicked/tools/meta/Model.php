@@ -47,7 +47,7 @@ trait Model
             }
             // one
             elseif($rel->type == 'one') {
-                return syn()->{$entity}->find($rel->link);
+                return syn()->{$entity}->find($this->{$rel->link});
             }
 
         }
